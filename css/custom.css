@@ -1,0 +1,72 @@
+/*
+ * It is advised not to edit the smartadmin_production.css
+ * as this will override any changes you make in the 
+ * later versions of this theme. 
+ * 
+ * We advise that you use use this CSS to override 
+ * SmartAdmin styles. 
+ * 
+ * Rename the stylesheet to whatever your liking so it will stay
+ * unique to you with each update of SmartAdmin.
+ */
+
+/*
+ * INDEX
+ * 
+ * - HTML
+ * - BODY
+ * - CUSTOM STYLES
+ */
+
+.table-noborder tr td {
+    border-top-style: dashed!important;
+}
+
+
+.table-noborder>thead>tr>th,  .table-noborder>thead>tr>td,.table-bordered>thead>tr>td, .table-noborder>tbody>tr>th, .table-noborder>tfoot>tr>th,  .table-noborder>tbody>tr>td, .table-noborder>tfoot>tr>td {
+    border: 1px   #ddd;
+}
+
+
+.custom-form header {
+    margin: 0px;
+    padding: 10px 14px 0;;
+}
+
+.custom-form  {
+
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.custom-form section {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.custom-form fieldset{
+    padding: 10px 14px 5px;
+}
+
+.custom-form .lastRow{
+    margin-bottom: 0px;
+}
+
+
+
+.custom-label {
+    float: left;
+    width: 20%;
+    text-align: right;
+    white-space: nowrap;
+    color: #808080;
+}
+
+.custom-view {
+    margin-left: 30%;
+    padding: 0 20px;
+    word-wrap: break-word;
+}
+
+
+
+

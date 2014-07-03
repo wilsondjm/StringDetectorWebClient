@@ -1,0 +1,503 @@
+﻿<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+		<meta charset="utf-8">
+		<!--<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">-->
+
+		<title> GS Platform </title>
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<!-- Use the correct meta names below for your web application
+			 Ref: http://davidbcalhoun.com/2010/viewport-metatag
+
+		<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">-->
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<!-- Basic Styles -->
+		<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome.min.css">
+
+		<!-- SmartAdmin Styles : Please note (smartadmin-production.css) was created using LESS variables -->
+		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-skins.css">
+
+		<!-- SmartAdmin RTL Support is under construction
+		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-rtl.css"> -->
+
+		<!-- We recommend you use "custom.css" to override SmartAdmin
+		     specific styles this will also ensure you retrain your customization with each SmartAdmin update.-->
+		<link rel="stylesheet" type="text/css" media="screen" href="css/custom.css">
+
+
+		<!-- FAVICONS -->
+        <link rel="shortcut icon" href="img/logo-platform.png" type="image/x-icon">
+        <link rel="icon" href="img/logo-platform.png" type="image/x-icon">
+
+		<!-- GOOGLE FONT -->
+		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
+
+	</head>
+	<body class="">
+		<!-- possible classes: minified, fixed-ribbon, fixed-header, fixed-width-->
+
+		<!-- HEADER -->
+		<header id="header">
+			<div id="logo-group">
+
+				<!-- PLACE YOUR LOGO HERE -->
+				<span id="logo"> <img src="img/logo-platform.png" alt="GaaS"> </span>
+				<!-- END LOGO PLACEHOLDER -->
+
+			</div>
+
+			<!-- projects dropdown -->
+			<div id="project-context">
+
+				<span class="label">Projects:</span>
+				<span id="project-selector" class="popover-trigger-element dropdown-toggle" data-toggle="dropdown">Recent projects <i class="fa fa-angle-down"></i></span>
+
+				<!-- Suggestion: populate this list with fetch and push technique -->
+				<ul class="dropdown-menu">
+					<li>
+						<a href="javascript:void(0);">Licensing </a>
+					</li>
+					<li>
+						<a href="javascript:void(0);">XenDesktop/MetaInstaller</a>
+					</li>
+					<li class="divider"></li>
+					<li>
+						<a href="javascript:void(0);"><i class="fa fa-power-off"></i> Clear</a>
+					</li>
+				</ul>
+				<!-- end dropdown-menu-->
+
+			</div>
+			<!-- end projects dropdown -->
+
+			<!-- pulled right: nav area -->
+			<div class="pull-right">
+
+				<!-- collapse menu button -->
+				<div id="hide-menu" class="btn-header pull-right">
+					<span> <a href="javascript:void(0);" title="Collapse Menu"><i class="fa fa-reorder"></i></a> </span>
+				</div>
+				<!-- end collapse menu -->
+
+				<!-- search mobile button (this is hidden till mobile view port) -->
+				<div id="search-mobile" class="btn-header transparent pull-right">
+					<span> <a href="javascript:void(0)" title="Search"><i class="fa fa-search"></i></a> </span>
+				</div>
+				<!-- end search mobile button -->
+
+				<!-- input: search field -->
+				<form action="#search.html" class="header-search pull-right">
+					<input type="text" placeholder="Find reports and more" id="search-fld">
+					<button type="submit">
+						<i class="fa fa-search"></i>
+					</button>
+					<a href="javascript:void(0);" id="cancel-search-js" title="Cancel Search"><i class="fa fa-times"></i></a>
+				</form>
+				<!-- end input: search field -->
+
+			</div>
+			<!-- end pulled right: nav area -->
+
+		</header>
+		<!-- END HEADER -->
+
+		<!-- Left panel : Navigation area -->
+		<!-- Note: This width of the aside area can be adjusted through LESS variables -->
+		<aside id="left-panel">
+
+			<!-- NAVIGATION : This navigation is also responsive
+
+			To make this navigation dynamic please make sure to link the node
+			(the reference to the nav > ul) after page load. Or the navigation
+			will not initialize.
+			-->
+			<nav>
+				<!-- NOTE: Notice the gaps after each icon usage <i></i>..
+				Please note that these links work a bit different than
+				traditional hre="" links. See documentation for details.
+				-->
+				<ul>
+					<li>
+                        <a href="javascript:void(0)" title="Dashboard"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">String Detector</span></a>
+					</li>
+					<li>
+						<a href="#"><i class="fa fa-lg fa-fw fa-folder-open"></i> <span class="menu-item-parent">Download Binaries</span></a>
+						<ul>
+							<li>
+                                <a href="../Tools/StringDetector/latest/string_detector.exe">Latest</a>
+							</li>
+							<li>
+                                <a href="../Tools/StringDetector/v1.16/string_detector.exe">v1.16</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="#"><i class="fa fa-lg fa-fw fa-table"></i> <span class="menu-item-parent">Jobs</span></a>
+						<ul>
+							<li>
+								<a href="#">Daemon Jobs</a>
+							</li>
+							<li>
+								<a href="./createjobform.html">Create a daemon job</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</nav>
+			<span class="minifyme"> <i class="fa fa-arrow-circle-left hit"></i> </span>
+
+		</aside>
+		<!-- END NAVIGATION -->
+
+		<!-- MAIN PANEL -->
+		<div id="main" role="main">
+
+			<!-- RIBBON -->
+			<div id="ribbon">
+				<!-- breadcrumb -->
+				<ol class="breadcrumb">
+					<li>
+						String Detector
+					</li>
+                    <li>Dashboard</li>
+				</ol>
+				<!-- end breadcrumb -->
+
+				<!-- You can also add more buttons to the
+				ribbon for further usability
+
+				Example below:
+
+				<span class="ribbon-button-alignment pull-right">
+				<span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
+				<span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
+				<span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
+				</span> -->
+
+			</div>
+			<!-- END RIBBON -->
+
+
+            <!-- MAIN CONTENT -->
+            <div id="content">
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+                        <h1 class="page-title txt-color-blueDark">
+                            <i class="fa fa-table fa-fw "></i>
+                            Jobs
+							<span>>
+								Tables
+							</span>
+                        </h1>
+                    </div>
+
+                </div>
+
+                <!-- widget grid -->
+                <section id="widget-grid" class="">
+
+                    <!-- row -->
+                    <div class="row">
+
+                        <!-- NEW WIDGET START -->
+                        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                            <!-- Widget ID (each widget will need unique ID)-->
+                            <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="true">
+                                <!-- widget options:
+                                usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+                                data-widget-colorbutton="false"
+                                data-widget-editbutton="false"
+                                data-widget-togglebutton="false"
+                                data-widget-deletebutton="false"
+                                data-widget-fullscreenbutton="false"
+                                data-widget-custombutton="false"
+                                data-widget-collapsed="true"
+                                data-widget-sortable="false"
+
+                                -->
+                                <header>
+                                    <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                                    <h2>Detecting Jobs Table </h2>
+
+                                </header>
+
+                                <!-- widget div-->
+                                <div>
+
+                                    <!-- widget edit box -->
+                                    <div class="jarviswidget-editbox">
+                                        <!-- This area used as dropdown edit box -->
+
+                                    </div>
+                                    <!-- end widget edit box -->
+
+                                    <!-- widget content -->
+                                    <div class="widget-body no-padding">
+                                        <div class="widget-body-toolbar">
+
+                                        </div>
+
+                                        <table id="dt_basic" class="table table-striped  table-hover table-bordered table-noborder">
+                                            <thead>
+                                            <tr>
+                                                <th>Project Name</th>
+                                                <th>Last Build</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                    <!-- end widget content -->
+
+                                </div>
+                                <!-- end widget div -->
+
+                            </div>
+                            <!-- end widget -->
+
+
+
+                        </article>
+                        <!-- WIDGET END -->
+
+                    </div>
+
+                    <!-- end row -->
+
+                </section>
+                <!-- end widget grid -->
+
+            </div>
+            <!-- END MAIN CONTENT -->
+
+		</div>
+		<!-- END MAIN PANEL -->
+
+        <!-- Hide Divs-->
+        <div class ="hide" >
+            <!--EXPAND ROW-->
+            <!-- widget div-->
+            <div  id="expand-job-row-">
+                <!-- widget content -->
+                <div class="widget-body no-padding">
+
+                    <form id="project-info-form-" class="smart-form custom-form" novalidate="novalidate">
+                        <header>
+                            Project Info
+                            <span class="widget-icon " id ="expand-project-info-icon-" > <a href="javascript:void(0)" title="expand"> <i class="fa fa-plus"></i></a></span>
+                            <span class="widget-icon " id ="collapse-project-info-icon-" style="display: none"> <a href="javascript:void(0)" title="collapse"> <i class="fa fa-minus"></i> </a> </span>
+                            <span class="widget-icon " id ="edit-project-info-icon-">  <a href="javascript:void(0)" title="edit"> <i class="fa fa-edit"></i> </a></span>
+                            <span class="widget-icon " id ="save-project-info-icon-" style="display: none"> <a href="javascript:void(0)" title="save">  <i class="fa fa-save"></i> </a></span>
+                        </header>
+
+                        <fieldset style="display: none;">
+                            <div class="row" id ="edit-project-info-" style="display: none;">
+                                <section class="col col-4 col-md-offset-3 lastRow" >
+                                    <label class="input"> <i class="icon-prepend fa fa-key"></i>
+                                        <input type="text" id="editProjectName-" name="projectName" placeholder="Project name">
+                                    </label>
+                                </section>
+                                <section class="col col-4 lastRow">
+                                    <label class="input"> <i class="icon-prepend fa fa-folder"></i>
+                                        <input type="text" id="editSourcePath-" name="sourcePath" placeholder="Source Path">
+                                    </label>
+                                </section>
+                            </div>
+                            <div class="row" id ="view-project-info-">
+                                <section class="col col-4 col-md-offset-3 lastRow">
+                                    <div class="custom-label  ">Project Name:</div>
+                                    <div class="custom-view" id="viewProjectName-">Licensing</div>
+                                </section>
+                                <section class="col col-4 lastRow">
+                                    <div class="custom-label  ">Source Path:</div>
+                                    <div class="custom-view"  id="viewSourcePath-">/BugTracker/src</div>
+                                </section>
+                            </div>
+                        </fieldset>
+                    </form>
+
+                    <form id="project-configuration-form-" class="smart-form custom-form" novalidate="novalidate">
+                        <header>
+                            Configuration
+                            <span class="widget-icon " id ="expand-project-config-icon-" > <a href="javascript:void(0)" title="expand"><i class="fa fa-plus"></i></a> </span>
+                            <span class="widget-icon " id ="collapse-project-config-icon-" style="display: none"> <a href="javascript:void(0)" title="collapse"><i class="fa fa-minus"></i></a> </span>
+                            <span class="widget-icon" id ="edit-project-config-icon-"> <a href="javascript:void(0)" title="edit"><i class="fa fa-edit"></i> </a></span>
+                            <span class="widget-icon" id ="save-project-config-icon-" style="display: none"> <a href="javascript:void(0)" title="save"><i class="fa fa-save"></i> </a></span>
+                            <span class="widget-icon" id ="upload-project-config-icon-"> <a href="javascript:void(0)" title="upload"><i class="fa fa-upload"></i></a> </span>
+                        </header>
+
+                        <fieldset style="display: none;">
+                            <div class="row">
+                                <section class="lastRow">
+                                    <label class="label">Content</label>
+                                    <label class="textarea state-disabled">
+                                        <textarea rows="5" class="custom-scroll" id="project-config-" name ="configuration" disabled="disabled">
+                                        </textarea>
+                                        <input type="file" id="project-configuration-file-"   style="display: none"/>
+                                    </label>
+                                    <div class="note">
+                                        <strong>Note:</strong> The configuration should contain source directory.
+                                    </div>
+                                </section>
+                            </div>
+
+                        </fieldset>
+                    </form>
+
+                    <form id="project-report-form-" class="smart-form custom-form" novalidate="novalidate">
+                        <header>
+                            Report
+                            <span class="widget-icon" id ="expand-project-report-icon-">  <a href="javascript:void(0)" title="expand"><i class="fa fa-plus"></i> </a></span>
+                            <span class="widget-icon" id ="collapse-project-report-icon-" style="display: none"><a href="javascript:void(0)" title="collapse"> <i class="fa fa-minus"></i> </a></span>
+                            <span class="widget-icon" id ="refresh-project-report-icon-"> <a href="javascript:void(0)" title="refresh"><i class="fa fa-refresh"></i></a> </span>
+                            <span class="widget-icon" id ="download-project-report-icon-"> <a href="javascript:void(0)" title="download"><i class="fa fa-download"></i></a> </span>
+                        </header>
+
+                        <fieldset style="display: none;">
+                            <div class="row">
+                                <section class="lastRow">
+                                    <label class="label">Content</label>
+                                    <label class="textarea state-disabled">
+                                        <textarea rows="8" class="custom-scroll" id="project-report-" disabled="disabled">
+
+                                        </textarea>
+                                    </label>
+                                    <div class="note">
+                                        <strong>Note:</strong> Only part of the report is showed , download to see the total content.
+                                    </div>
+                                </section>
+                            </div>
+
+                        </fieldset>
+                    </form>
+
+                </div>
+                <!-- end widget content -->
+
+            </div>
+            <!-- end widget div -->
+            <!--END EXPAND ROW-->
+        </div>
+        <!-- END Hide Divs-->
+
+
+		<!--================================================== -->
+
+		<!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)-->
+		<script data-pace-options='{ "restartOnRequestAfter": true }' src="js/plugin/pace/pace.min.js"></script>
+
+		<!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+		<script>
+			if (!window.jQuery) {
+				document.write('<script src="js/libs/jquery-2.0.2.min.js"><\/script>');
+			}
+		</script>
+
+		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+		<script>
+			if (!window.jQuery.ui) {
+				document.write('<script src="js/libs/jquery-ui-1.10.3.min.js"><\/script>');
+			}
+		</script>
+
+		<!-- JS TOUCH : include this plugin for mobile drag / drop touch events
+		<script src="js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script> -->
+
+		<!-- BOOTSTRAP JS -->
+		<script src="js/bootstrap/bootstrap.min.js"></script>
+
+		<!-- CUSTOM NOTIFICATION -->
+		<script src="js/notification/SmartNotification.min.js"></script>
+
+		<!-- JARVIS WIDGETS -->
+		<script src="js/smartwidgets/jarvis.widget.min.js"></script>
+
+		<!-- EASY PIE CHARTS -->
+		<script src="js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js"></script>
+
+		<!-- SPARKLINES -->
+		<script src="js/plugin/sparkline/jquery.sparkline.min.js"></script>
+
+		<!-- JQUERY VALIDATE -->
+		<script src="js/plugin/jquery-validate/jquery.validate.min.js"></script>
+
+		<!-- JQUERY MASKED INPUT -->
+		<script src="js/plugin/masked-input/jquery.maskedinput.min.js"></script>
+
+		<!-- JQUERY SELECT2 INPUT -->
+		<script src="js/plugin/select2/select2.min.js"></script>
+        <!-- JQUERY FIlE Download -->
+        <script src="js/plugin/jquery-filedownload/jquery.fileDownload.js"></script>
+        <!-- JQUERY TIMER  -->
+        <script src="js/plugin/jquery-timer/jquery.timer.js"></script>
+
+		<!-- JQUERY UI + Bootstrap Slider -->
+		<script src="js/plugin/bootstrap-slider/bootstrap-slider.min.js"></script>
+
+		<!-- browser msie issue fix -->
+		<script src="js/plugin/msie-fix/jquery.mb.browser.min.js"></script>
+
+		<!-- FastClick: For mobile devices -->
+		<script src="js/plugin/fastclick/fastclick.js"></script>
+
+		<!--[if IE 7]>
+
+		<h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
+
+		<![endif]-->
+
+		<!-- Demo purpose only -->
+		<!--script src="js/demo.js"></script-->
+
+		<!-- MAIN APP JS FILE -->
+		<script src="js/app.js"></script>
+
+		<!-- PAGE RELATED PLUGIN(S) -->
+		<script src="js/plugin/datatables/jquery.dataTables-cust.min.js"></script>
+		<script src="js/plugin/datatables/ColReorder.min.js"></script>
+		<script src="js/plugin/datatables/FixedColumns.min.js"></script>
+		<script src="js/plugin/datatables/ColVis.min.js"></script>
+		<script src="js/plugin/datatables/ZeroClipboard.js"></script>
+		<script src="js/plugin/datatables/media/js/TableTools.min.js"></script>
+		<script src="js/plugin/datatables/DT_bootstrap.js"></script>
+
+
+		<script src="js/custom.js"></script>
+
+		<!-- Your GOOGLE ANALYTICS CODE Below -->
+		<!--script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+var ga = document.createElement('script');
+ga.type = 'text/javascript';
+ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0];
+s.parentNode.insertBefore(ga, s);
+})();
+
+		</script-->
+
+	</body>
+
+</html>
