@@ -260,7 +260,7 @@ function jobStopClick(){
     var nTr = $(this).parents("tr")[0];
     
     $.ajax({
-        type : "post",
+        type : "delete",
         cache: false,
         url: "../api/jobs/" + jobName + "/stop",
         data: null,
