@@ -58,6 +58,9 @@ background-image: -o-linear-gradient(top, #6F7D94, #697486);
 background-image: linear-gradient(to bottom, #6F7D94, #697486);
 }
 
+
+
+
 .smart-style-1 #logo-group span#activity {
 background: #0d0f12;
 border: 1px solid #0d0f12;
@@ -813,6 +816,8 @@ body.smart-style-3, .smart-style-3 body {
 	background-image: linear-gradient(to bottom, #f78c40, #d67632);
 }
 
+
+
 .smart-style-3 #ribbon {
 	background: #fff;
 } 
@@ -935,7 +940,7 @@ color: #5F5F5F;
 
 .smart-style-3 nav>ul>li > a{
 	padding: 12px 10px 12px 11px;
-	font-size: 13px;
+	font-size: 15px;
 }
 
 .smart-style-3 nav>ul>li>a>i {
@@ -1124,4 +1129,11 @@ color: #5F5F5F;
 
 
 /********************************************************************* Skin-4 *************************************************************/
-
+.smart-style-4 #header {
+    background-color: #34bc9b;
+    background-image: -moz-linear-gradient(top, #34bc9b, #34bc9b);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#34bc9b), to(#34bc9b));
+    background-image: -webkit-linear-gradient(top, #34bc9b, #34bc9b);
+    background-image: -o-linear-gradient(top, #34bc9b, #34bc9b);
+    background-image: linear-gradient(to bottom, #34bc9b, #34bc9b);
+}

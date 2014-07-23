@@ -4955,21 +4955,21 @@
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
+		 *      var jobsObjTable = $('#example').dataTable();
 		 *
 		 *      // Highlight every second row
-		 *      oTable.$('tr:odd').css('backgroundColor', 'blue');
+		 *      jobsObjTable.$('tr:odd').css('backgroundColor', 'blue');
 		 *    } );
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
+		 *      var jobsObjTable = $('#example').dataTable();
 		 *
 		 *      // Filter to rows with 'Webkit' in them, add a background colour and then
 		 *      // remove the filter, thus highlighting the 'Webkit' rows only.
-		 *      oTable.fnFilter('Webkit');
-		 *      oTable.$('tr', {"filter": "applied"}).css('backgroundColor', 'blue');
-		 *      oTable.fnFilter('');
+		 *      jobsObjTable.fnFilter('Webkit');
+		 *      jobsObjTable.$('tr', {"filter": "applied"}).css('backgroundColor', 'blue');
+		 *      jobsObjTable.fnFilter('');
 		 *    } );
 		 */
 		this.$ = function ( sSelector, oOpts )
@@ -5091,10 +5091,10 @@
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
+		 *      var jobsObjTable = $('#example').dataTable();
 		 *
 		 *      // Get the data from the first row in the table
-		 *      var data = oTable._('tr:first');
+		 *      var data = jobsObjTable._('tr:first');
 		 *
 		 *      // Do something useful with the data
 		 *      alert( "First cell is: "+data[0] );
@@ -5102,11 +5102,11 @@
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
+		 *      var jobsObjTable = $('#example').dataTable();
 		 *
 		 *      // Filter to 'Webkit' and get all data for 
-		 *      oTable.fnFilter('Webkit');
-		 *      var data = oTable._('tr', {"filter": "applied"});
+		 *      jobsObjTable.fnFilter('Webkit');
+		 *      var data = jobsObjTable._('tr', {"filter": "applied"});
 		 *      
 		 *      // Do something with the data
 		 *      alert( data.length+" rows matched the filter" );
@@ -5220,13 +5220,13 @@
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable( {
+		 *      var jobsObjTable = $('#example').dataTable( {
 		 *        "sScrollY": "200px",
 		 *        "bPaginate": false
 		 *      } );
 		 *      
 		 *      $(window).bind('resize', function () {
-		 *        oTable.fnAdjustColumnSizing();
+		 *        jobsObjTable.fnAdjustColumnSizing();
 		 *      } );
 		 *    } );
 		 */
@@ -5254,10 +5254,10 @@
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
+		 *      var jobsObjTable = $('#example').dataTable();
 		 *      
 		 *      // Immediately 'nuke' the current rows (perhaps waiting for an Ajax callback...)
-		 *      oTable.fnClearTable();
+		 *      jobsObjTable.fnClearTable();
 		 *    } );
 		 */
 		this.fnClearTable = function( bRedraw )
@@ -5282,18 +5282,18 @@
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
-		 *      var oTable;
+		 *      var jobsObjTable;
 		 *      
 		 *      // 'open' an information row when a row is clicked on
 		 *      $('#example tbody tr').click( function () {
-		 *        if ( oTable.fnIsOpen(this) ) {
-		 *          oTable.fnClose( this );
+		 *        if ( jobsObjTable.fnIsOpen(this) ) {
+		 *          jobsObjTable.fnClose( this );
 		 *        } else {
-		 *          oTable.fnOpen( this, "Temporary row opened", "info_row" );
+		 *          jobsObjTable.fnOpen( this, "Temporary row opened", "info_row" );
 		 *        }
 		 *      } );
 		 *      
-		 *      oTable = $('#example').dataTable();
+		 *      jobsObjTable = $('#example').dataTable();
 		 *    } );
 		 */
 		this.fnClose = function( nTr )
@@ -5330,10 +5330,10 @@
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
+		 *      var jobsObjTable = $('#example').dataTable();
 		 *      
 		 *      // Immediately remove the first row
-		 *      oTable.fnDeleteRow( 0 );
+		 *      jobsObjTable.fnDeleteRow( 0 );
 		 *    } );
 		 */
 		this.fnDeleteRow = function( mTarget, fnCallBack, bRedraw )
@@ -5400,8 +5400,8 @@
 		 *  @example
 		 *    $(document).ready(function() {
 		 *      // This example is fairly pointless in reality, but shows how fnDestroy can be used
-		 *      var oTable = $('#example').dataTable();
-		 *      oTable.fnDestroy();
+		 *      var jobsObjTable = $('#example').dataTable();
+		 *      jobsObjTable.fnDestroy();
 		 *    } );
 		 */
 		this.fnDestroy = function ( bRemove )
@@ -5539,10 +5539,10 @@
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
+		 *      var jobsObjTable = $('#example').dataTable();
 		 *      
 		 *      // Re-draw the table - you wouldn't want to do it here, but it's an example :-)
-		 *      oTable.fnDraw();
+		 *      jobsObjTable.fnDraw();
 		 *    } );
 		 */
 		this.fnDraw = function( bComplete )
@@ -5572,10 +5572,10 @@
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
+		 *      var jobsObjTable = $('#example').dataTable();
 		 *      
 		 *      // Sometime later - filter...
-		 *      oTable.fnFilter( 'test string' );
+		 *      jobsObjTable.fnFilter( 'test string' );
 		 *    } );
 		 */
 		this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal, bCaseInsensitive )
@@ -5667,10 +5667,10 @@
 		 *  @example
 		 *    // Row data
 		 *    $(document).ready(function() {
-		 *      oTable = $('#example').dataTable();
+		 *      jobsObjTable = $('#example').dataTable();
 		 *
-		 *      oTable.$('tr').click( function () {
-		 *        var data = oTable.fnGetData( this );
+		 *      jobsObjTable.$('tr').click( function () {
+		 *        var data = jobsObjTable.fnGetData( this );
 		 *        // ... do something with the array / object of data for the row
 		 *      } );
 		 *    } );
@@ -5678,10 +5678,10 @@
 		 *  @example
 		 *    // Individual cell data
 		 *    $(document).ready(function() {
-		 *      oTable = $('#example').dataTable();
+		 *      jobsObjTable = $('#example').dataTable();
 		 *
-		 *      oTable.$('td').click( function () {
-		 *        var sData = oTable.fnGetData( this );
+		 *      jobsObjTable.$('td').click( function () {
+		 *        var sData = jobsObjTable.fnGetData( this );
 		 *        alert( 'The cell clicked on had the value of '+sData );
 		 *      } );
 		 *    } );
@@ -5729,10 +5729,10 @@
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
+		 *      var jobsObjTable = $('#example').dataTable();
 		 *      
 		 *      // Get the nodes from the table
-		 *      var nNodes = oTable.fnGetNodes( );
+		 *      var nNodes = jobsObjTable.fnGetNodes( );
 		 *    } );
 		 */
 		this.fnGetNodes = function( iRow )
@@ -5760,10 +5760,10 @@
 		 *    $(document).ready(function() {
 		 *      $('#example tbody td').click( function () {
 		 *        // Get the position of the current data from the node
-		 *        var aPos = oTable.fnGetPosition( this );
+		 *        var aPos = jobsObjTable.fnGetPosition( this );
 		 *        
 		 *        // Get the data array for this row
-		 *        var aData = oTable.fnGetData( aPos[0] );
+		 *        var aData = jobsObjTable.fnGetData( aPos[0] );
 		 *        
 		 *        // Update the data array and return the value
 		 *        aData[ aPos[1] ] = 'clicked';
@@ -5771,7 +5771,7 @@
 		 *      } );
 		 *      
 		 *      // Init DataTables
-		 *      oTable = $('#example').dataTable();
+		 *      jobsObjTable = $('#example').dataTable();
 		 *    } );
 		 */
 		this.fnGetPosition = function( nNode )
@@ -5801,18 +5801,18 @@
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
-		 *      var oTable;
+		 *      var jobsObjTable;
 		 *      
 		 *      // 'open' an information row when a row is clicked on
 		 *      $('#example tbody tr').click( function () {
-		 *        if ( oTable.fnIsOpen(this) ) {
-		 *          oTable.fnClose( this );
+		 *        if ( jobsObjTable.fnIsOpen(this) ) {
+		 *          jobsObjTable.fnClose( this );
 		 *        } else {
-		 *          oTable.fnOpen( this, "Temporary row opened", "info_row" );
+		 *          jobsObjTable.fnOpen( this, "Temporary row opened", "info_row" );
 		 *        }
 		 *      } );
 		 *      
-		 *      oTable = $('#example').dataTable();
+		 *      jobsObjTable = $('#example').dataTable();
 		 *    } );
 		 */
 		this.fnIsOpen = function( nTr )
@@ -5846,18 +5846,18 @@
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
-		 *      var oTable;
+		 *      var jobsObjTable;
 		 *      
 		 *      // 'open' an information row when a row is clicked on
 		 *      $('#example tbody tr').click( function () {
-		 *        if ( oTable.fnIsOpen(this) ) {
-		 *          oTable.fnClose( this );
+		 *        if ( jobsObjTable.fnIsOpen(this) ) {
+		 *          jobsObjTable.fnClose( this );
 		 *        } else {
-		 *          oTable.fnOpen( this, "Temporary row opened", "info_row" );
+		 *          jobsObjTable.fnOpen( this, "Temporary row opened", "info_row" );
 		 *        }
 		 *      } );
 		 *      
-		 *      oTable = $('#example').dataTable();
+		 *      jobsObjTable = $('#example').dataTable();
 		 *    } );
 		 */
 		this.fnOpen = function( nTr, mHtml, sClass )
@@ -5917,8 +5917,8 @@
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
-		 *      oTable.fnPageChange( 'next' );
+		 *      var jobsObjTable = $('#example').dataTable();
+		 *      jobsObjTable.fnPageChange( 'next' );
 		 *    } );
 		 */
 		this.fnPageChange = function ( mAction, bRedraw )
@@ -5943,10 +5943,10 @@
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
+		 *      var jobsObjTable = $('#example').dataTable();
 		 *      
 		 *      // Hide the second column after initialisation
-		 *      oTable.fnSetColumnVis( 1, false );
+		 *      jobsObjTable.fnSetColumnVis( 1, false );
 		 *    } );
 		 */
 		this.fnSetColumnVis = function ( iCol, bShow, bRedraw )
@@ -6061,8 +6061,8 @@
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
-		 *      var oSettings = oTable.fnSettings();
+		 *      var jobsObjTable = $('#example').dataTable();
+		 *      var oSettings = jobsObjTable.fnSettings();
 		 *      
 		 *      // Show an example parameter from the settings
 		 *      alert( oSettings._iDisplayStart );
@@ -6082,10 +6082,10 @@
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
+		 *      var jobsObjTable = $('#example').dataTable();
 		 *      
 		 *      // Sort immediately with columns 0 and 1
-		 *      oTable.fnSort( [ [0,'asc'], [1,'asc'] ] );
+		 *      jobsObjTable.fnSort( [ [0,'asc'], [1,'asc'] ] );
 		 *    } );
 		 */
 		this.fnSort = function( aaSort )
@@ -6105,10 +6105,10 @@
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
+		 *      var jobsObjTable = $('#example').dataTable();
 		 *      
 		 *      // Sort on column 1, when 'sorter' is clicked on
-		 *      oTable.fnSortListener( document.getElementById('sorter'), 1 );
+		 *      jobsObjTable.fnSortListener( document.getElementById('sorter'), 1 );
 		 *    } );
 		 */
 		this.fnSortListener = function( nNode, iColumn, fnCallback )
@@ -6133,9 +6133,9 @@
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
-		 *      oTable.fnUpdate( 'Example update', 0, 0 ); // Single cell
-		 *      oTable.fnUpdate( ['a', 'b', 'c', 'd', 'e'], 1, 0 ); // Row
+		 *      var jobsObjTable = $('#example').dataTable();
+		 *      jobsObjTable.fnUpdate( 'Example update', 0, 0 ); // Single cell
+		 *      jobsObjTable.fnUpdate( ['a', 'b', 'c', 'd', 'e'], 1, 0 ); // Row
 		 *    } );
 		 */
 		this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
@@ -6225,8 +6225,8 @@
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
-		 *      alert( oTable.fnVersionCheck( '1.9.0' ) );
+		 *      var jobsObjTable = $('#example').dataTable();
+		 *      alert( jobsObjTable.fnVersionCheck( '1.9.0' ) );
 		 *    } );
 		 */
 		this.fnVersionCheck = DataTable.ext.fnVersionCheck;
@@ -7148,8 +7148,8 @@
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
-		 *      var oTable = $('#example').dataTable();
-		 *      alert( oTable.fnVersionCheck( '1.9.0' ) );
+		 *      var jobsObjTable = $('#example').dataTable();
+		 *      alert( jobsObjTable.fnVersionCheck( '1.9.0' ) );
 		 *    } );
 		 */
 		"fnVersionCheck": DataTable.fnVersionCheck,
@@ -8076,7 +8076,7 @@
 		 * 
 		 *  @example
 		 *    $(document).ready( function() {
-		 *      var oTable = $('#example').dataTable( {
+		 *      var jobsObjTable = $('#example').dataTable( {
 		 *        "sAjaxSource": "sources/arrays.txt",
 		 *        "bDeferRender": true
 		 *      } );
@@ -8250,8 +8250,8 @@
 		 *    
 		 *    function tableActions ()
 		 *    {
-		 *      var oTable = initTable();
-		 *      // perform API operations with oTable 
+		 *      var jobsObjTable = initTable();
+		 *      // perform API operations with jobsObjTable
 		 *    }
 		 */
 		"bRetrieve": false,
@@ -9563,7 +9563,7 @@
 		 *  @example
 		 *    // Get data from { "data": [...] }
 		 *    $(document).ready( function() {
-		 *      var oTable = $('#example').dataTable( {
+		 *      var jobsObjTable = $('#example').dataTable( {
 		 *        "sAjaxSource": "sources/data.txt",
 		 *        "sAjaxDataProp": "data"
 		 *      } );
@@ -9572,7 +9572,7 @@
 		 *  @example
 		 *    // Get data from { "data": { "inner": [...] } }
 		 *    $(document).ready( function() {
-		 *      var oTable = $('#example').dataTable( {
+		 *      var jobsObjTable = $('#example').dataTable( {
 		 *        "sAjaxSource": "sources/data.txt",
 		 *        "sAjaxDataProp": "data.inner"
 		 *      } );
@@ -10101,7 +10101,7 @@
 		 *  @example
 		 *    // Read table data from objects
 		 *    $(document).ready( function() {
-		 *      var oTable = $('#example').dataTable( {
+		 *      var jobsObjTable = $('#example').dataTable( {
 		 *        "sAjaxSource": "sources/deep.txt",
 		 *        "aoColumns": [
 		 *          { "mData": "engine" },
@@ -10117,7 +10117,7 @@
 		 *    // Using mData as a function to provide different information for
 		 *    // sorting, filtering and display. In this case, currency (price)
 		 *    $(document).ready( function() {
-		 *      var oTable = $('#example').dataTable( {
+		 *      var jobsObjTable = $('#example').dataTable( {
 		 *        "aoColumnDefs": [ {
 		 *          "aTargets": [ 0 ],
 		 *          "mData": function ( source, type, val ) {
@@ -10182,7 +10182,7 @@
 		 *  @example
 		 *    // Create a comma separated list from an array of objects
 		 *    $(document).ready( function() {
-		 *      var oTable = $('#example').dataTable( {
+		 *      var jobsObjTable = $('#example').dataTable( {
 		 *        "sAjaxSource": "sources/deep.txt",
 		 *        "aoColumns": [
 		 *          { "mData": "engine" },
@@ -10198,7 +10198,7 @@
 		 *  @example
 		 *    // Use as a function to create a link from the data source
 		 *    $(document).ready( function() {
-		 *      var oTable = $('#example').dataTable( {
+		 *      var jobsObjTable = $('#example').dataTable( {
 		 *        "aoColumnDefs": [
 		 *        {
 		 *          "aTargets": [ 0 ],
@@ -10224,7 +10224,7 @@
 		 *  @example
 		 *    // Make the first column use TH cells
 		 *    $(document).ready( function() {
-		 *      var oTable = $('#example').dataTable( {
+		 *      var jobsObjTable = $('#example').dataTable( {
 		 *        "aoColumnDefs": [ {
 		 *          "aTargets": [ 0 ],
 		 *          "sCellType": "th"

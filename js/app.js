@@ -367,7 +367,7 @@ $(document).ready(function() {
 function nav_page_height() {
 	var setHeight = $('#main').height();
 	//menuHeight = $.left_panel.height();
-	
+    $.navbar_height=0;
 	var windowHeight = $(window).height() - $.navbar_height;
 	//set height
 
@@ -658,7 +658,7 @@ function runAllForms() {
 			$this.datepicker({
 				dateFormat : dataDateFormat,
 				prevText : '<i class="fa fa-chevron-left"></i>',
-				nextText : '<i class="fa fa-chevron-right"></i>',
+				nextText : '<i class="fa fa-chevron-right"></i>'
 			});
 		})
 	}
