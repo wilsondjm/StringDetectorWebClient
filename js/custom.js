@@ -59,6 +59,10 @@ function registJobFormListener(jobName){
     $(document).delegate(actionStop+jobName,'click',jobStopClick);
     $(document).delegate(actionDelete+jobName,'click',jobDeleteClick);
 
+    $(document).delegate(jobToolBar+jobName,'show',function(){
+        alert("change");
+    })
+
 
 }
 
@@ -557,6 +561,7 @@ function batchJobStartClick(){
 
                 // we shall update the table at last ,the fnUpdate will trigger the current filter
                 jobsObjTable.fnUpdate(aData,nTr);
+                $(jobToolBar+jobName).toolbar({content: jotToolBarOption+jobName, position: 'top',hideOnClick:true});
                 updateCategory();
 
             },
@@ -607,7 +612,7 @@ function jobStartClick(){
             var aData=transferToJobRecord(jobsMap[jobName]);
             $(jobStart+jobName).addClass("active");
             $(jobStop+jobName).removeClass("active");
-            /* Open this row */
+            // Open this row
             jobName = aData[1];
             nTrObject.click();
             $(step4Head).click();
@@ -617,6 +622,7 @@ function jobStartClick(){
 
             // we shall update the table at last ,the fnUpdate will trigger the current filter
             jobsObjTable.fnUpdate(aData,nTr);
+            $(jobToolBar+jobName).toolbar({content: jotToolBarOption+jobName, position: 'top',hideOnClick:true});
             updateCategory();
 
         },
@@ -632,6 +638,7 @@ function jobStartClick(){
          $(this).parent().parent().hide();
          $(jobToolBar+jobName).removeClass("pressed");
      }
+
 
 }
 
@@ -680,6 +687,7 @@ function batchJobStopClick(){
                         }
                         var aData=transferToJobRecord(jobsMap[jobName]);
                         jobsObjTable.fnUpdate(aData,index);
+                        $(jobToolBar+jobName).toolbar({content: jotToolBarOption+jobName, position: 'top',hideOnClick:true});
                         updateCategory();
 
                     },
@@ -745,6 +753,7 @@ function jobStopClick(){
                     }
                     var aData=transferToJobRecord(jobsMap[jobName]);
                     jobsObjTable.fnUpdate(aData,index);
+                    $(jobToolBar+jobName).toolbar({content: jotToolBarOption+jobName, position: 'top',hideOnClick:true});
                     updateCategory();
 
 
@@ -952,6 +961,7 @@ function transferToJobRecord(job){
     record.push(state);
     record.push(actionStr);
     record.push(actionToolBarStr+toolOptionStr);
+    $(jobToolBar+jobName).toolbar({content: jotToolBarOption+jobName, position: 'top',hideOnClick:true});
     return record;
 }
 
@@ -1019,6 +1029,7 @@ function refreshProject(jobName, offset){
                         }
                         var aData=transferToJobRecord(jobsMap[jobName]);
                         jobsObjTable.fnUpdate(aData,index);
+                        $(jobToolBar+jobName).toolbar({content: jotToolBarOption+jobName, position: 'top',hideOnClick:true});
                         updateCategory();
 
 
