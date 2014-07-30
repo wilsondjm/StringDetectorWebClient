@@ -60,7 +60,7 @@ function registJobFormListener(jobName){
     $(document).delegate(actionDelete+jobName,'click',jobDeleteClick);
 
     $(document).delegate(jobToolBar+jobName,'show',function(){
-        alert("change");
+       // alert("change");
     })
 
 
