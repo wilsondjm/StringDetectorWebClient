@@ -15,15 +15,8 @@ var mode=modeEnum.large;
 
 // data map
 var  jobsMap={};
-/*var  configurationsMap={};
-var  jobSettingMap={};
-var  jobReportMap={};*/
-
 // new viewModel
-
 var  timersMap={};
-
-
 
 // jenkins ballcolor  map
 var buildStatusMap ={"Failed":completed,
@@ -75,8 +68,6 @@ function registBuildHistoryFormListener(jobName){
     $(document).delegate(historyTable+jobName +" tr td a",'click',viewBiuldReportClick);
     $(document).delegate(downloadBuildReportIcon,'click',downloadBuildViewReportClick);
     $(document).delegate(popoutBuildReportIcon,'click',popoutBuildViewReportClick);
-
-
 }
 
 function registeJobFormValidationListener(jobName){
@@ -180,17 +171,17 @@ function saveProjectBasicCallback(jobName){
     // use ajax to put the change and update the jobsmap and jobsObjTable Data in success callback
     var putData={};
     putData["JobName"]=projectName;
-    putData["buildPeriody"]=timing;
+    putData["BuildPeriody"]=timing;
     putData["SCMPort"]=p4Port;
     putData["UserName"]=p4Username;
-    putData["Passoword"]=p4Password;
+    putData["Password"]=p4Password;
     putData["Workspace"]=p4Workspace;
     putData["ViewMap"]=p4Viewmap;
 
     $.ajax({
         type : "put",
         cache: false,
-        url: "../api/jobs/" + jobName,
+        url: "../api/jobs/" + jobName+"/setting",
         data : JSON.stringify(putData),
         dataType : "json",
         contentType:"application/json; charset=utf-8",
@@ -199,22 +190,21 @@ function saveProjectBasicCallback(jobName){
     // the current api didn't return correct data to transfer the state
             // for the reason that the put operation didn't change the job name we don't need to update jobMap
             //update the settingMap
-            var settings = jobSettingMap[jobName];
-            settings.JobName=projectName;
-            settings.buildPeriody=timing;
-            settings.SCMPort = p4Port;
-            settings.UserName=p4Username;
-            settings.Passoword=p4Password;
-            settings.Workspace=p4Workspace;
-            settings.ViewMap=p4Viewmap;
+            var settingDto = data;
+            var settings = jobsMap[jobName].setting;
+            settings.JobName=settingDto.JobName;
+            settings.buildPeriody=settingDto.BuildPeriody;
+            settings.scmSettings[0].SCMPort = settingDto.SCMPort;
+            settings.scmSettings[0].UserName=settingDto.UserName;
+            settings.scmSettings[0].Password=settingDto.Password;
+            settings.scmSettings[0].Workspace=settingDto.Workspace;
+            settings.scmSettings[0].ViewMap=settingDto.ViewMap;
+
+            jobsMap[jobName].setting=settings;
 
             // toggle the edit-save icon
             $(editProjectBasicIcon+jobName).show();
             $(saveProjectBasicIcon+jobName).hide();
-
-           /* var aData = jobsDto.fnGetData(nTr);
-            aData=transferToJobRecord(jobsMap[jobName]);
-            oTable.fnUpdate(aData,nTr);*/
 
             // change to view mode
             $(basicSettingForm+jobName).removeClass("custom-form-edit").addClass("custom-form");
@@ -225,27 +215,6 @@ function saveProjectBasicCallback(jobName){
         },
         error : function(XMLHttpRequest,
                          textStatus, errorThrown) {
-        },
-        complete: function(){
-            var settings = jobSettingMap[jobName];
-            settings.JobName=projectName;
-            settings.buildPeriody=timing;
-            settings.SCMPort = p4Port;
-            settings.UserName=p4Username;
-            settings.Passoword=p4Password;
-            settings.Workspace=p4Workspace;
-            settings.ViewMap=p4Viewmap;
-
-            // toggle the edit-save icon
-            $(editProjectBasicIcon+jobName).show();
-            $(saveProjectBasicIcon+jobName).hide();
-
-            // change to view mode
-            $(basicSettingForm+jobName).removeClass("custom-form-edit").addClass("custom-form");
-            //  $(jobNameInput+jobName).prop("readonly",true);
-            $(jobNameInput+jobName).removeClass("uneditable");
-            $(timingInput+jobName).prop("readonly",true);
-            $(timingInput+jobName).addClass("no-border");
         }
     });
 
@@ -285,17 +254,17 @@ function saveProjectScmCallback(jobName){
     // use ajax to put the change and update the jobsmap and jobsObjTable Data in success callback
     var putData={};
     putData["JobName"]=projectName;
-    putData["buildPeriody"]=timing;
+    putData["BuildPeriody"]=timing;
     putData["SCMPort"]=p4Port;
     putData["UserName"]=p4Username;
-    putData["Passoword"]=p4Password;
+    putData["Password"]=p4Password;
     putData["Workspace"]=p4Workspace;
     putData["ViewMap"]=p4Viewmap;
 
     $.ajax({
         type : "put",
         cache: false,
-        url: "../api/jobs/" + jobName,
+        url: "../api/jobs/" + jobName+"/setting",
         data : JSON.stringify(putData),
         dataType : "json",
         contentType:"application/json; charset=utf-8",
@@ -304,23 +273,20 @@ function saveProjectScmCallback(jobName){
             // the current api didn't return correct data to transfer the state
             // for the reason that the put operation didn't change the job name we don't need to update jobMap
             //update the settingMap
-            var settings = jobSettingMap[jobName];
-            settings.JobName=projectName;
-            settings.buildPeriody=timing;
-            settings.SCMPort = p4Port;
-            settings.UserName=p4Username;
-            settings.Passoword=p4Password;
-            settings.Workspace=p4Workspace;
-            settings.ViewMap=p4Viewmap;
-
+            var settingDto = data;
+            var settings = jobsMap[jobName].setting;
+            settings.JobName=settingDto.JobName;
+            settings.buildPeriody=settingDto.BuildPeriody;
+            settings.scmSettings[0].SCMPort = settingDto.SCMPort;
+            settings.scmSettings[0].UserName=settingDto.UserName;
+            settings.scmSettings[0].Password=settingDto.Password;
+            settings.scmSettings[0].Workspace=settingDto.Workspace;
+            settings.scmSettings[0].ViewMap=settingDto.ViewMap;
+            jobsMap[jobName].setting=settings;
 
             // toggle the edit-save icon
-            $(editProjectBasicIcon+jobName).show();
-            $(saveProjectBasicIcon+jobName).hide();
-
-            /* var aData = jobsDto.fnGetData(nTr);
-             aData=transferToJobRecord(jobsMap[jobName]);
-             oTable.fnUpdate(aData,nTr);*/
+            $(editScmIcon+jobName).show();
+            $(saveScmIcon+jobName).hide();
 
             // change to view mode
             $(scmSettingForm+jobName).removeClass("custom-form-edit").addClass("custom-form");
@@ -332,27 +298,6 @@ function saveProjectScmCallback(jobName){
         },
         error : function(XMLHttpRequest,
                          textStatus, errorThrown) {
-        },
-        complete: function(){
-            var settings = jobSettingMap[jobName];
-            settings.JobName=projectName;
-            settings.buildPeriody=timing;
-            settings.SCMPort = p4Port;
-            settings.UserName=p4Username;
-            settings.Passoword=p4Password;
-            settings.Workspace=p4Workspace;
-            settings.ViewMap=p4Viewmap;
-
-            // toggle the edit-save icon
-            $(editScmIcon+jobName).show();
-            $(saveScmIcon+jobName).hide();
-            // change to view mode
-            $(scmSettingForm+jobName).removeClass("custom-form-edit").addClass("custom-form");
-            $(p4UsernameInput+jobName).prop("readonly",true).addClass("no-border");
-            $(p4PasswordInput+jobName).prop("readonly",true).addClass("no-border");
-            $(p4PortInput+jobName).prop("readonly",true).addClass("no-border");
-            $(p4WorkspaceNameInput+jobName).prop("readonly",true).addClass("no-border");
-            $(p4ViewmapInput+jobName).prop("readonly",true).addClass("no-border");
         }
     });
 }
@@ -374,7 +319,6 @@ function saveProjectConfigClick(){
     var jobName = spiltArray[spiltArray.length-1];
     var nTr = jobsObjTable.$('tr.custom-selected')[0];
 
-
     // paste the exsisting content into input filed
     var configContent=$(projectConfigInput+jobName).val();
     var putData={};
@@ -383,19 +327,14 @@ function saveProjectConfigClick(){
     $.ajax({
         type : "put",
         cache: false,
-        url: "../api/Configuration/" + jobName,
+        url: "../api/jobs/" + jobName+"/configuration",
         data : JSON.stringify(putData),
         dataType : "json",
         contentType:"application/json; charset=utf-8",
         cache :false,
         success : function(data) {
             // update jobs map
-//          jobsMap[jobNumber].Configuration = data;
-//          var jobConfig =data;
-            // toggle the edit-view state
-
-            // update jobs configuration map
-            configurationsMap[jobName]=configContent;
+            jobsMap[jobName].config = data;
             $(projectConfigForm+jobName).removeClass("custom-form-edit").addClass("custom-form");
             $(projectConfigInput+jobName).prop('readonly',"true").addClass("no-border");
 
@@ -405,14 +344,6 @@ function saveProjectConfigClick(){
         },
         error : function(XMLHttpRequest,
                          textStatus, errorThrown) {
-        },
-        complete: function(){
-            configurationsMap[jobName]=configContent;
-            $(projectConfigForm+jobName).removeClass("custom-form-edit").addClass("custom-form");
-            $(projectConfigInput+jobName).prop('readonly',"true").addClass("no-border");
-            // toggle the edit-save icon
-            $(editProjectConfigIcon+jobName).show();
-            $(saveProjectConfigIcon+jobName).hide();
         }
     });
 
@@ -444,7 +375,7 @@ function downloadProjectReportClick(){
     var spiltArray = $(this).attr("id").split(seperator);
     var jobName = spiltArray[spiltArray.length-1];
     //download(jobName+"_latest_report.txt",$(projectReportInput+jobName).html());
-    $.fileDownload("../api/jobs/"+jobName+"/Report/file/lastBuild", {
+    $.fileDownload("../api/jobs/"+jobName+"/report/lastBuild/file", {
         successCallback: function (url) {
 
         },
@@ -459,7 +390,7 @@ function downloadBuildViewReportClick(){
     var jobName = $(this).attr("data-job-name");
     var buildNumber =  $(this).attr("data-build-number");
 
-    $.fileDownload("../api/jobs/"+jobName+"/Report/file/"+buildNumber, {
+    $.fileDownload("../api/jobs/"+jobName+"/report/"+buildNumber+"/file", {
         successCallback: function (url) {
 
         },
@@ -930,7 +861,7 @@ function createJobValidateCallBack(){
         url: requestURL,
         contentType: "application/json",
         data : reqData,
-        success : function(data, textStatus, request) {
+        success : function(data) {
             $(createJobModal).modal('hide');
             location.reload(true);
         },
@@ -1501,7 +1432,9 @@ $(document).ready(function() {
             $.ajax({
                 type: "post",
                 url:  "../api/validation/jobname/",
-                data: validation,
+                data : JSON.stringify(validation),
+                dataType : "json",
+                contentType:"application/json; charset=utf-8",
                 async: false,
                 success: function(result)
                 {
@@ -1531,7 +1464,9 @@ $(document).ready(function() {
             $.ajax({
                 type: "post",
                 url:  "../api/validation/timing/",
-                data:   validation,
+                data : JSON.stringify(validation),
+                dataType : "json",
+                contentType:"application/json; charset=utf-8",
                 async: false,
                 success: function(result)
                 {
