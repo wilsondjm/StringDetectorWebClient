@@ -6,10 +6,8 @@
 // datatables  object
 var  jobsObjTable;
 var  historyObjTable;
-// data transfered object
-var  jobsDto;
-var  historyDto;
-
+var  hub;
+var  tempReport="";
 var modeEnum={small:0,middle:1,large:2}
 var mode=modeEnum.large;
 
@@ -558,6 +556,8 @@ function jobStartClick(){
             // trigger refreshing
             timersMap[jobName].play();
 
+           // hub.server.fetchJobReport(jobName);
+
             // we shall update the table at last ,the fnUpdate will trigger the current filter
             jobsObjTable.fnUpdate(aData,nTr);
             $(jobToolBar+jobName).toolbar({content: jotToolBarOption+jobName, position: 'top',hideOnClick:true});
@@ -619,36 +619,7 @@ function batchJobStopClick(){
                 updateCategory();
 
 
-               /* $.ajax({
-                    type : "get",
-                    cache: false,
-                    url: "../api/jobs/" + jobName+"/status",
-                    cache :false,
-                    success : function(data) {
-                        var jobStatusDto=data;
-                        // get last build color through ajax and update the status
-                        jobsMap[jobName].lastBuildColor = jobStatusDto.Color;
-                        jobsMap[jobName].lastBuildStatus = completed;
-                        // we shall update the table at last ,the fnUpdate will trigger the current filter
-                        var tableData=jobsObjTable.fnGetData();
-                        var index=0;
-                        for(var i=0;i<tableData.length;i++){
-                            if(tableData[i][1]==jobName){
-                                index=i;
-                                break;
-                            }
-                        }
-                        var aData=transferToJobRecord(jobsMap[jobName]);
-                        jobsObjTable.fnUpdate(aData,index);
-                        $(jobToolBar+jobName).toolbar({content: jotToolBarOption+jobName, position: 'top',hideOnClick:true});
-                        updateCategory();
 
-                    },
-                    error : function(XMLHttpRequest,
-                                     textStatus, errorThrown) {
-
-                    }
-                });*/
             },
             error : function(XMLHttpRequest,
                              textStatus, errorThrown) {
@@ -698,38 +669,6 @@ function jobStopClick(){
             $(jobToolBar+jobName).toolbar({content: jotToolBarOption+jobName, position: 'top',hideOnClick:true});
             updateCategory();
 
-            /*$.ajax({
-                type : "get",
-                cache: false,
-                url: "../api/jobs/" + jobName+"/status",
-                cache :false,
-                success : function(data) {
-                    var jobStatusDto=data;
-                    // get last build color through ajax and update the status
-                    jobsMap[jobName].lastBuildColor = jobStatusDto.Color;
-                    jobsMap[jobName].lastBuildStatus = completed;
-
-                    // we shall update the table at last ,the fnUpdate will trigger the current filter
-                    var tableData=jobsObjTable.fnGetData();
-                    var index=0;
-                    for(var i=0;i<tableData.length;i++){
-                        if(tableData[i][1]==jobName){
-                            index=i;
-                            break;
-                        }
-                    }
-                    var aData=transferToJobRecord(jobsMap[jobName]);
-                    jobsObjTable.fnUpdate(aData,index);
-                    $(jobToolBar+jobName).toolbar({content: jotToolBarOption+jobName, position: 'top',hideOnClick:true});
-                    updateCategory();
-
-
-                },
-                error : function(XMLHttpRequest,
-                                 textStatus, errorThrown) {
-
-                }
-            });*/
         },
         error : function(XMLHttpRequest,
                          textStatus, errorThrown) {
@@ -853,7 +792,7 @@ function createJobValidateCallBack(){
     jobData["ViewMap"]		= $(p4Viewmap).val();
     jobData["Configuration"]= "To Be Defined";
 
-    var requestURL = "../api/jobs/" + jobData["JobName"];
+    var requestURL = "../api/jobs/" + jobData["JobName"]+"?field=jobName";
     var reqData = JSON.stringify(jobData);
     $.ajax({
         type : "post",
@@ -1048,6 +987,20 @@ function UpdateProjectDisplayData(jobName, report, completed){
         },2000,function(){
         // alert("done");
     }
+    );
+}
+
+function appendReportData(jobName,report){
+    var reportContent =$(projectReportInput+jobName).text();;
+    if($(projectReportInput+jobName).length==0){
+        return;
+    }
+    $(projectReportInput+jobName).text(reportContent+report);
+    $(projectReportInput+jobName).animate({
+            scrollTop:$(projectReportInput+jobName)[0].scrollHeight - $(projectReportInput+jobName).height()
+        },2000,function(){
+            // alert("done");
+        }
     );
 }
 
@@ -1530,4 +1483,16 @@ $(document).ready(function() {
     });
 
     $(".minifyme").click();
+
+    hub = $.connection.jobHub;
+    hub.client.hello=function (message){
+        alert(message);
+    };
+    hub.client.appendReport = appendReportData;
+    hub.client.showReport = function () {
+        alert(tempReport);
+    }
+    $.connection.hub.start().done(function(){
+
+    });
 })
