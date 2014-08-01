@@ -185,16 +185,7 @@ function saveProjectBasicCallback(jobName){
             // for the reason that the put operation didn't change the job name we don't need to update jobMap
             //update the settingMap
             var settingDto = data;
-            var settings = jobsMap[jobName].setting;
-            settings.JobName=settingDto.JobName;
-            settings.buildPeriody=settingDto.BuildPeriody;
-            settings.scmSettings[0].SCMPort = settingDto.SCMPort;
-            settings.scmSettings[0].UserName=settingDto.UserName;
-            settings.scmSettings[0].Password=settingDto.Password;
-            settings.scmSettings[0].Workspace=settingDto.Workspace;
-            settings.scmSettings[0].ViewMap=settingDto.ViewMap;
-
-            jobsMap[jobName].setting=settings;
+            jobsMap[jobName].Setting=settingDto;
 
             // toggle the edit-save icon
             $(editProjectBasicIcon+jobName).show();
@@ -268,15 +259,7 @@ function saveProjectScmCallback(jobName){
             // for the reason that the put operation didn't change the job name we don't need to update jobMap
             //update the settingMap
             var settingDto = data;
-            var settings = jobsMap[jobName].setting;
-            settings.JobName=settingDto.JobName;
-            settings.buildPeriody=settingDto.BuildPeriody;
-            settings.scmSettings[0].SCMPort = settingDto.SCMPort;
-            settings.scmSettings[0].UserName=settingDto.UserName;
-            settings.scmSettings[0].Password=settingDto.Password;
-            settings.scmSettings[0].Workspace=settingDto.Workspace;
-            settings.scmSettings[0].ViewMap=settingDto.ViewMap;
-            jobsMap[jobName].setting=settings;
+            jobsMap[jobName].Setting=settingDto;
 
             // toggle the edit-save icon
             $(editScmIcon+jobName).show();
@@ -328,7 +311,7 @@ function saveProjectConfigClick(){
         cache :false,
         success : function(data) {
             // update jobs map
-            jobsMap[jobName].config = data;
+            jobsMap[jobName].Configuration = data;
             $(projectConfigForm+jobName).removeClass("custom-form-edit").addClass("custom-form");
             $(projectConfigInput+jobName).prop('readonly',"true").addClass("no-border");
 
@@ -459,7 +442,7 @@ function batchJobStartClick(){
 
         var jobName = $(this).attr("data-name");
         // check job current state
-        if(jobsMap[jobName].result==running){
+        if(jobsMap[jobName].Result==running){
             return ;
         }
         var nTrObject=$(this).parents("tr");
@@ -475,9 +458,9 @@ function batchJobStartClick(){
             cache: false,
             success : function(data) {
                 var partialJob =data;
-                jobsMap[jobName].status=partialJob.status;
+                jobsMap[jobName].Status=partialJob.Status;
                 var job = jobsMap[jobName];
-                job.result=running;
+                job.Result=running;
                 var aData=transferToJobRecord(job);
                 $(jobStart+jobName).addClass("active");
                 $(jobStop+jobName).removeClass("active");
@@ -514,7 +497,7 @@ function jobStartClick(){
     var spiltArray = $(this).attr("id").split(seperator);
     var jobName = spiltArray[spiltArray.length-1];
     // check job current state
-    if(jobsMap[jobName].result==running){
+    if(jobsMap[jobName].Result==running){
         return ;
     }
     var nTrObject=$(this).parents("tr");
@@ -536,9 +519,9 @@ function jobStartClick(){
         cache: false,
         success : function(data) {
             var partialJob =data;
-            jobsMap[jobName].status=partialJob.status;
+            jobsMap[jobName].Status=partialJob.Status;
             var job = jobsMap[jobName];
-            job.result=running;
+            job.Result=running;
             var aData=transferToJobRecord(job);
             $(jobStart+jobName).addClass("active");
             $(jobStop+jobName).removeClass("active");
@@ -577,7 +560,7 @@ function batchJobStopClick(){
     $("input:checked", jobsObjTable.fnGetNodes()).each(function(){
         var jobName = $(this).attr("data-name");
         // check job current state
-        if(jobsMap[jobName].result!=running){
+        if(jobsMap[jobName].Result!=running){
             return ;
         }
         var nTrObject=$(this).parents("tr");
@@ -592,7 +575,6 @@ function batchJobStopClick(){
             cache: false,
             success : function(data) {
                // var job= data;
-               // jobsMap[job.jobName]=job;
                 $(jobStart+jobName).removeClass("active");
                 $(jobStop+jobName).addClass("active");
             },
@@ -627,7 +609,6 @@ function jobStopClick(){
         cache: false,
         success : function(data) {
         	//var job =data;
-            //jobsMap[job.jobName]=job;
             $(jobStart+jobName).removeClass("active");
             $(jobStop+jobName).addClass("active");
         },
@@ -780,31 +761,31 @@ function createJobValidateCallBack(){
 //for datatables
 function transferToJobRecord(job){
     var actionToolBarStr ='<div class="btn-group action" data-toggle="buttons"> <button ' +
-        ' id="job-toolbar'+seperator+job.jobName+'" data-toggle="tooltip" title="" type="button" class="btn btn-default btn-xs action" data-original-title="Action"><i class="fa fa-gear"></i></button>'+
+        ' id="job-toolbar'+seperator+job.JobName+'" data-toggle="tooltip" title="" type="button" class="btn btn-default btn-xs action" data-original-title="Action"><i class="fa fa-gear"></i></button>'+
         '</div>';
     var toolOptionStr ='<div class="hide"><div ' +
-        'id="job-toolbar-options'+seperator+job.jobName+'"><a href="javascript:void(0)" ' +
-        'id="action-start'+seperator+job.jobName+'"><i class="fa fa-play"></i></a><a href="javascript:void(0)"' +
-        'id="action-stop'+seperator+job.jobName+'"><i class="fa fa-stop"></i></a><a href="javascript:void(0)"' +
-        'id="action-delete'+seperator+job.jobName+'"><i class="fa fa-trash-o"></i></a></div></div> ';
+        'id="job-toolbar-options'+seperator+job.JobName+'"><a href="javascript:void(0)" ' +
+        'id="action-start'+seperator+job.JobName+'"><i class="fa fa-play"></i></a><a href="javascript:void(0)"' +
+        'id="action-stop'+seperator+job.JobName+'"><i class="fa fa-stop"></i></a><a href="javascript:void(0)"' +
+        'id="action-delete'+seperator+job.JobName+'"><i class="fa fa-trash-o"></i></a></div></div> ';
     var actionStr;
-    var state =job.result;
-    var checkBoxStr ='<div class="checkbox "><label><input type="checkbox" class="checkbox style-2" data-name="'+job.jobName+'"><span></span> </label></div>';
+    var state =job.Result;
+    var checkBoxStr ='<div class="checkbox "><label><input type="checkbox" class="checkbox style-2" data-name="'+job.JobName+'"><span></span> </label></div>';
 
     var actionStr1 = '<div class="btn-group action" data-toggle="buttons">' +
                         '<label title="Start Job" class="btn btn-default btn-xs action ' ;
       //  ' active'
-    var actionStr2=     '" id="job-start'+seperator+job.jobName+'" ><input type="radio" name="style-a1" id="style-a1"> ' +
+    var actionStr2=     '" id="job-start'+seperator+job.JobName+'" ><input type="radio" name="style-a1" id="style-a1"> ' +
                                      '<i class="fa fa-play action"></i>' +
                         '</label>' +
                      '<label title="Stop Job" class="btn btn-default btn-xs action ' ;
 //      'active'
-   var actionStr3=     '" id="job-stop'+seperator+job.jobName+'" ><input type="radio" name="style-a2" id="style-a2"> ' +
+   var actionStr3=     '" id="job-stop'+seperator+job.JobName+'" ><input type="radio" name="style-a2" id="style-a2"> ' +
                                   '<i class="fa fa-stop action"></i>' +
                        '</label>' +
                          '<label title="Delete Job" class="btn btn-default btn-xs action ' ;
      //   'active'
-     var actionStr4=     '" id="job-delete'+seperator+job.jobName+'" ><input type="radio" name="style-a2" id="style-a3">' +
+     var actionStr4=     '" id="job-delete'+seperator+job.JobName+'" ><input type="radio" name="style-a2" id="style-a3">' +
                                  ' <i class="fa fa-trash-o action"></i>' +
                          '</label>' +
                      '</div>';
@@ -827,8 +808,8 @@ function transferToJobRecord(job){
 
     var record = [];
     record.push(checkBoxStr);
-    record.push(job.jobName);
-    record.push(job.status.Status);
+    record.push(job.JobName);
+    record.push(job.Status.Status);
     record.push(state);
     record.push(actionStr);
     record.push(actionToolBarStr+toolOptionStr);
@@ -881,10 +862,10 @@ function updateReportCallback(jobName){
         success : function(data) {
             var partialJob=data;
             // get last build color through ajax and update the status
-            jobsMap[jobName].status = partialJob.status;
-            jobsMap[jobName].result = completed;
-            jobsMap[jobName].builds = partialJob.builds;
-            jobsMap[jobName].report= partialJob.report;
+            jobsMap[jobName].Status = partialJob.Status;
+            jobsMap[jobName].Result = completed;
+            jobsMap[jobName].Builds = partialJob.Builds;
+            jobsMap[jobName].Report= partialJob.Report;
             // we shall update the table at last ,the fnUpdate will trigger the current filter
             var tableData=jobsObjTable.fnGetData();
             var index=0;
@@ -905,7 +886,7 @@ function updateReportCallback(jobName){
             if(jobName==showName){
                 historyObjTable.fnClearTable();
                 historyObjTable.fnDraw();
-                var historyDto = job.builds.JobHistories;
+                var historyDto = job.Builds.JobHistories;
                 var historyRecord=[];
                 $.each(historyDto,function(i,build){
                     historyRecord.push(transferToBuildRecord(build,jobName));
@@ -1018,11 +999,11 @@ function htmlDecode(value){
 function loadJobs(jobs){
     // remove the 'validation' job from jobs
     jobs=jobs.filter(function(job){
-        return job.jobName!=validation;
+        return job.JobName!=validation;
     })
 
     $.grep(jobs, function (job, i) {
-        if (job.jobName==validation) { // or whatever
+        if (job.JobName==validation) { // or whatever
             return false;
         }
         // do your normal code on el
@@ -1032,10 +1013,10 @@ function loadJobs(jobs){
     // use the fake data
     var  jobRecords=[];
     $.each(jobs,function(i,job){
-        registJobFormListener(job.jobName);
-        job["result"]=buildStatusMap[job.status.Status];
+        registJobFormListener(job.JobName);
+        job.Result=buildStatusMap[job.Status.Status];
         jobRecords.push(transferToJobRecord(job));
-        jobsMap[job.jobName]=job;
+        jobsMap[job.JobName]=job;
     });
 
     jobsObjTable= $(dtBasic).dataTable({
@@ -1079,7 +1060,7 @@ function loadJobs(jobs){
     });
     jobsObjTable.$('tr:first').click();
     $.each(jobs,function(i,job){
-        if(jobsMap[job.jobName].result==running){
+        if(jobsMap[job.JobName].Result==running){
             hub.server.fetchJobReport(jobName);
         }
     });
@@ -1138,7 +1119,7 @@ function  showJobDetailClick(event){
         var job=jobsMap[jobName];
         $(jobTablePanel).html(getJobDetails(job));
         registeJobFormValidationListener(jobName);
-        var historyDto = job.builds.JobHistories;
+        var historyDto = job.Builds.JobHistories;
         loadHistory(jobName,historyDto);
     }
 }
@@ -1202,12 +1183,15 @@ $(document).ready(function() {
     $.ajax({
         type : "get",
         cache: false,
-        url: "../api/jobs",
+        //url: "../api/jobs",
+        url:"../api/tools/faketool",
         data : "",
         success : function(data) {
 
             $(window).resize(windowResize);
-            loadJobs(data);
+            //loadJobs(data);
+            var jobsData =data.Jobs;
+            loadJobs(jobsData);
         },
         error : function(XMLHttpRequest,
                          textStatus, errorThrown) {
@@ -1216,7 +1200,6 @@ $(document).ready(function() {
         complete: function (){
         }
     });
-
 
 
 

@@ -132,7 +132,7 @@ var returnBuildList ="#returnBuildList";
 /* Formating function for row details */
 function getJobDetails ( job )
 {
-    var jobName = job.jobName;
+    var jobName = job.JobName;
     var expandJobDetailObject= $(expandJobDetail).clone();
     //var expandRowNode = expandJobDetailObject[0];
     expandJobDetailObject.attr("id", expandJobDetailObject.attr("id")+jobName);
@@ -254,22 +254,22 @@ function getJobDetails ( job )
     historyTableObject.attr("id",historyTableObject.attr("id")+jobName);
     // initial the job setting fileds
     //var jobSetting = jobSettingMap[jobName];
-    var jobSetting = job.setting;
+    var jobSetting = job.Setting;
      jobNameInputObject.attr("value",jobSetting.JobName);
-     timingInputObject.attr("value",jobSetting.buildPeriody);
-     p4UsernameInputObject.attr("value",jobSetting.scmSettings[0].UserName);
-     p4PasswordInputObject.attr("value",jobSetting.scmSettings[0].Password);
-     p4PortInputObject.attr("value",jobSetting.scmSettings[0].SCMPort);
-     p4WorkspaceNameInputObject.attr("value",jobSetting.scmSettings[0].Workspace);
-     p4ViewmapInputObject.text(jobSetting.scmSettings[0].ViewMap);
+     timingInputObject.attr("value",jobSetting.BuildPeriody);
+     p4UsernameInputObject.attr("value",jobSetting.UserName);
+     p4PasswordInputObject.attr("value",jobSetting.Password);
+     p4PortInputObject.attr("value",jobSetting.SCMPort);
+     p4WorkspaceNameInputObject.attr("value",jobSetting.Workspace);
+     p4ViewmapInputObject.text(jobSetting.ViewMap);
 
     // init the configuration panel
-    projectConfigInputObject.text(job.configuration.Configuration);
+    projectConfigInputObject.text(job.Configuration.Configuration);
 
 
 
     //init the job report panel
     // get no data in the report
-    projectReportInputObject.text(job.report.Report);
+    projectReportInputObject.text(job.Report.Report);
     return expandJobDetailObject.html();
 }
