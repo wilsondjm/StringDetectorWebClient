@@ -37,7 +37,7 @@ function updateBuildView(buildNumber,jobName,rowIndex,totalNum){
      $.ajax({
      type : "get",
      cache: false,
-     url: "../api/jobs/" + jobName+"/Report/"+buildNumber,
+     url: serviceUrl+"/api/jobs/" + jobName+"/report/"+buildNumber,
      success : function(data) {
          var reportResult=data["Report"];
          $(buildViewInput).text(reportResult);

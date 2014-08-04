@@ -9,6 +9,7 @@ var  historyObjTable;
 var  hub;
 var modeEnum={small:0,middle:1,large:2}
 var mode=modeEnum.large;
+var serviceUrl="http://vhwebdevserver.eng.citrite.net";
 
 // data map
 var  jobsMap={};
@@ -175,7 +176,7 @@ function saveProjectBasicCallback(jobName){
     $.ajax({
         type : "put",
         cache: false,
-        url: "../api/jobs/" + jobName+"/setting",
+        url: serviceUrl+"/api/jobs/" + jobName+"/setting",
         data : JSON.stringify(putData),
         dataType : "json",
         contentType:"application/json; charset=utf-8",
@@ -249,7 +250,7 @@ function saveProjectScmCallback(jobName){
     $.ajax({
         type : "put",
         cache: false,
-        url: "../api/jobs/" + jobName+"/setting",
+        url: serviceUrl+"/api/jobs/" + jobName+"/setting",
         data : JSON.stringify(putData),
         dataType : "json",
         contentType:"application/json; charset=utf-8",
@@ -304,7 +305,7 @@ function saveProjectConfigClick(){
     $.ajax({
         type : "put",
         cache: false,
-        url: "../api/jobs/" + jobName+"/configuration",
+        url: serviceUrl+"/api/jobs/" + jobName+"/configuration",
         data : JSON.stringify(putData),
         dataType : "json",
         contentType:"application/json; charset=utf-8",
@@ -451,7 +452,7 @@ function batchJobStartClick(){
         $.ajax({
             type : "post",
             cache: false,
-            url: "../api/jobs/" + jobName + "/start?fields=status",
+            url: serviceUrl+"/api/jobs/" + jobName + "/start?fields=status",
             data: null,
             dataType: "json",
             contentType: "application/json",
@@ -512,7 +513,7 @@ function jobStartClick(){
     $.ajax({
         type : "post",
         cache: false,
-        url: "../api/jobs/" + jobName + "/start?fields=status",
+        url: serviceUrl+"/api/jobs/" + jobName + "/start?fields=status",
         data: null,
         dataType: "json",
         contentType: "application/json",
@@ -568,7 +569,7 @@ function batchJobStopClick(){
         $.ajax({
             type : "delete",
             cache: false,
-            url: "../api/jobs/" + jobName + "/stop?fields=jobName",
+            url: serviceUrl+"/api/jobs/" + jobName + "/stop?fields=jobName",
             data: null,
             dataType: "json",
             contentType: "application/json",
@@ -602,7 +603,7 @@ function jobStopClick(){
     $.ajax({
         type : "delete",
         cache: false,
-        url: "../api/jobs/" + jobName + "/stop?fields=jobName",
+        url: serviceUrl+"/api/jobs/" + jobName + "/stop?fields=jobName",
         data: null,
         dataType: "json",
         contentType: "application/json",
@@ -634,7 +635,7 @@ function batchJobDeleteClick(){
         $.ajax({
             type : "delete",
             cache: false,
-            url: "../api/jobs/" + jobName,
+            url: serviceUrl+"/api/jobs/" + jobName,
             data: null,
             dataType: "json",
             contentType: "application/json",
@@ -669,7 +670,7 @@ function jobDeleteClick(){
     $.ajax({
         type : "delete",
         cache: false,
-        url: "../api/jobs/" + jobName,
+        url: serviceUrl+"/api/jobs/" + jobName,
         data: null,
         dataType: "json",
         contentType: "application/json",
@@ -734,7 +735,7 @@ function createJobValidateCallBack(){
     jobData["ViewMap"]		= $(p4Viewmap).val();
     jobData["Configuration"]= "To Be Defined";
 
-    var requestURL = "../api/jobs/" + jobData["JobName"]+"?field=jobName";
+    var requestURL = serviceUrl+"/api/jobs/" + jobData["JobName"]+"?field=jobName";
     var reqData = JSON.stringify(jobData);
     $.ajax({
         type : "post",
@@ -857,7 +858,7 @@ function updateReportCallback(jobName){
     $.ajax({
         type : "get",
         cache: false,
-        url: "../api/jobs/" + jobName+"?fields=builds,status,report",
+        url: serviceUrl+"/api/jobs/" + jobName+"?fields=builds,status,report",
         cache :false,
         success : function(data) {
             var partialJob=data;
@@ -1172,7 +1173,6 @@ function windowResize(){
 
 $(document).ready(function() {
 	pageSetUp();
-
     $.root_.removeClassPrefix('smart-style')
             .addClass('smart-style-3');
 
@@ -1184,7 +1184,7 @@ $(document).ready(function() {
         type : "get",
         cache: false,
         //url: "../api/jobs",
-        url:"../api/tools/faketool",
+        url:serviceUrl+"/api/tools/faketool",
         data : "",
         success : function(data) {
 
@@ -1266,7 +1266,7 @@ $(document).ready(function() {
             validation["Input"]=value;
             $.ajax({
                 type: "post",
-                url:  "../api/validation/jobname/",
+                url:  serviceUrl+"/api/validation/jobname/",
                 data : JSON.stringify(validation),
                 dataType : "json",
                 contentType:"application/json; charset=utf-8",
@@ -1298,7 +1298,7 @@ $(document).ready(function() {
             validation["Input"]=value;
             $.ajax({
                 type: "post",
-                url:  "../api/validation/timing/",
+                url:  serviceUrl+"/api/validation/timing/",
                 data : JSON.stringify(validation),
                 dataType : "json",
                 contentType:"application/json; charset=utf-8",
@@ -1365,7 +1365,7 @@ $(document).ready(function() {
     });
 
     $(".minifyme").click();
-
+    $.connection.hub.url=serviceUrl+"/signalr";
     hub = $.connection.jobHub;
     hub.client.hello=function (message){
         alert(message);
@@ -1373,6 +1373,8 @@ $(document).ready(function() {
     hub.client.appendReport = appendReportData;
     hub.client.updateReportCallback =updateReportCallback;
     $.connection.hub.start().done(function(){
-
+        console.log("connected");
+    }).fail(function (error){
+        console.log("connect error");
     });
 })
