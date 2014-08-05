@@ -213,23 +213,7 @@
                         </div>
 
                         <div id="page-group">
-                            <!--<div class="btn-group pull-right  ">
-                                <button type="button" class="btn btn-success"><i class="fa fa-chevron-left"></i></button>
-                                <button type="button" class="btn btn-success"><i class="fa fa-chevron-right"></i></button>
-                            </div>&lt;!&ndash; /.btn-group .pull-right &ndash;&gt;-->
-                           <!-- <div class="pull-right margin-right" id="page-length-selector">
-                                <span class="smart-form ">
-                                    <label class="select" style="width:60px">
-                                        <select size="1" id="page_length_select" name="dt_basic_length" aria-controls="dt_basic">
-                                            <option value="15" selected="selected">15</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                            <option value="100">100</option>
-                                        </select>
-                                        <i></i>
-                                    </label>
-                                </span>
-                            </div>-->
+
                         </div>
 
                     </div><!-- /.btn-toolbar -->
@@ -339,37 +323,74 @@
 
                             <fieldset style="display: block;">
                                 <div class="row" id="view-scm--">
-                                    <section >
-                                        <div class="custom-label  " title="P4 Username:">P4 Username:</div>
-                                        <div class="custom-control-1  " id="viewP4Username--">
-                                            <input id="p4UsernameInput--" class="form-control no-border " name="p4Username" value="" type="text" spellcheck="false"  readonly>
-                                        </div>
-                                    </section>
-                                    <section >
-                                        <div class="custom-label  " title="P4 Password:">P4 Password:</div>
-                                        <div class="custom-control-1  " id="viewP4Password--">
-                                            <input id="p4PasswordInput--" class="form-control no-border " title="encrypted" name="p4Password" value="" type="text" spellcheck="false"  readonly>
-                                        </div>
-                                    </section>
-                                    <section >
-                                        <div class="custom-label  " title="P4 Port(Server):">P4 Port(Server):</div>
-                                        <div class="custom-control-1  " id="viewP4Port--">
-                                            <input id="p4PortInput--" class="form-control no-border " name="p4Port" value="" type="text" spellcheck="false"  readonly>
-                                        </div>
-                                    </section>
-                                    <section >
-                                        <div class="custom-label  " title="P4 Workspace Name:">P4 Workspace Name:</div>
-                                        <div class="custom-control-1  " id="viewP4WorkspaceName--">
-                                            <input id="p4WorkspaceNameInput--" class="form-control no-border " name="p4WorkspaceName" value="" type="text" spellcheck="false"  readonly>
-                                        </div>
-                                    </section>
-                                    <section >
-                                        <div class="custom-label  " title="P4 Workspace Viewmap:">P4 Workspace Viewmap:</div>
-                                        <div class="custom-control-1  " id="viewP4Viewmap--">
-                                            <textarea id="p4ViewmapInput--" class="form-control no-border " name="p4Viewmap" spellcheck="false"   readonly></textarea>
-                                        </div>
-                                    </section>
+                                    <div id="gitScm--">
+                                        <section >
+                                            <div class="custom-label  " title="Repository Url:">Repository URL:</div>
+                                            <div class="custom-control-1  " id="viewGitRepositoryUrl--">
+                                                <input id="gitRepositoryUrlInput--" class="form-control no-border " name="gitRepositoryUrl" value="" type="text" spellcheck="false"  readonly>
+                                            </div>
+                                        </section>
+                                        <section >
+                                            <div class="custom-label  " title="Name:">Name:</div>
+                                            <div class="custom-control-1  " id="viewGitName--">
+                                                <input id="gitNameInput--" class="form-control no-border " name="gitName" value="" type="text" spellcheck="false"  readonly>
+                                            </div>
+                                        </section>
+                                        <section >
+                                            <div class="custom-label  " title="Branch Specifier:">Branch Specifier:</div>
+                                            <div class="custom-control-1  " id="viewGitBranch--">
+                                                <input id="gitBranchInput--" class="form-control no-border " name="gitBranch" value="" type="text" spellcheck="false"  readonly>
+                                            </div>
+                                        </section>
+                                    </div>
+                                    <div id="svnScm--">
+                                        <section >
+                                            <div class="custom-label  " title="Repository Url:">Repository URL:</div>
+                                            <div class="custom-control-1  " id="viewSvnRepositoryUrl--">
+                                                <input id="svnRepositoryUrlInput--" class="form-control no-border " name="svnRepositoryUrl" value="" type="text" spellcheck="false"  readonly>
+                                            </div>
+                                        </section>
+                                        <section >
+                                            <div class="custom-label  " title="Local Module Directory:">Local Module Directory:</div>
+                                            <div class="custom-control-1  " id="viewSvnLocalModuleDir--">
+                                                <input id="svnLocalModuleDirInput--" class="form-control no-border " name="svnLocalModuleDir" value="" type="text" spellcheck="false"  readonly>
+                                            </div>
+                                        </section>
+                                    </div>
+                                    <div id="perforceScm--">
+                                        <section >
+                                            <div class="custom-label  " title="P4 Username:">P4 Username:</div>
+                                            <div class="custom-control-1  " id="viewP4Username--">
+                                                <input id="p4UsernameInput--" class="form-control no-border " name="p4Username" value="" type="text" spellcheck="false"  readonly>
+                                            </div>
+                                        </section>
+                                        <section >
+                                            <div class="custom-label  " title="P4 Password:">P4 Password:</div>
+                                            <div class="custom-control-1  " id="viewP4Password--">
+                                                <input id="p4PasswordInput--" class="form-control no-border " title="encrypted" name="p4Password" value="" type="text" spellcheck="false"  readonly>
+                                            </div>
+                                        </section>
+                                        <section >
+                                            <div class="custom-label  " title="P4 Port(Server):">P4 Port(Server):</div>
+                                            <div class="custom-control-1  " id="viewP4Port--">
+                                                <input id="p4PortInput--" class="form-control no-border " name="p4Port" value="" type="text" spellcheck="false"  readonly>
+                                            </div>
+                                        </section>
+                                        <section >
+                                            <div class="custom-label  " title="P4 Workspace Name:">P4 Workspace Name:</div>
+                                            <div class="custom-control-1  " id="viewP4WorkspaceName--">
+                                                <input id="p4WorkspaceNameInput--" class="form-control no-border " name="p4WorkspaceName" value="" type="text" spellcheck="false"  readonly>
+                                            </div>
+                                        </section>
+                                        <section >
+                                            <div class="custom-label  " title="P4 Workspace Viewmap:">P4 Workspace Viewmap:</div>
+                                            <div class="custom-control-1  " id="viewP4Viewmap--">
+                                                <textarea id="p4ViewmapInput--" class="form-control no-border " name="p4Viewmap" spellcheck="false"   readonly></textarea>
+                                            </div>
+                                        </section>
+                                    </div>
                                 </div>
+
                             </fieldset>
                         </form>
                     </div><!-- /.panel-body -->
@@ -561,9 +582,6 @@
 
 		<![endif]-->
 
-		<!-- Demo purpose only -->
-		<!--script src="js/demo.js"></script-->
-
 		<!-- MAIN APP JS FILE -->
 		<script src="js/app.js"></script>
 
@@ -581,7 +599,8 @@
         <!--Reference the SignalR library. -->
         <script src="js/plugin/jquery-signalR/jquery.signalR-2.0.0.js"></script>
         <!--Reference the auto generated SignalR hub script. -->
-        <script type="text/javascript" src="http://vhwebdevserver.eng.citrite.net/signalr/hubs"></script>
+       <!-- <script src="http://vhwebdevserver.eng.citrite.net/signalr/hubs"></script>-->
+        <script src="http://localhost:61586/signalr/hubs"></script>
 		<script src="js/custom.js"></script>
 
 	</body>

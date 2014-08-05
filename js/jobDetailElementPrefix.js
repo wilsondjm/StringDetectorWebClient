@@ -82,6 +82,9 @@ var scmSettingForm = "#scm-setting-form"+seperator;
 var editScmIcon="#edit-scm-icon"+seperator;
 var saveScmIcon ="#save-scm-icon"+seperator;
 var viewScm="#view-scm"+seperator;
+// perforce scm
+var perforceScm="#perforceScm"+seperator;
+var perforceScmType="StringDetectorService.ReqResModel.PerforceSettingDto, StringDetectorService";
 var viewP4Username="#viewP4Username"+seperator;
 var p4UsernameInput="#p4UsernameInput"+seperator;
 var viewP4Password="#viewP4Username"+seperator;
@@ -92,6 +95,22 @@ var viewP4WorkspaceName="#viewP4WorkspaceName"+seperator;
 var p4WorkspaceNameInput="#p4WorkspaceNameInput"+seperator;
 var viewP4Viewmap ="#viewP4Viewmap"+seperator;
 var p4ViewmapInput="#p4ViewmapInput"+seperator;
+// git scm
+var gitScm="#gitScm"+seperator;
+var gitScmType="StringDetectorService.ReqResModel.GitSettingDto, StringDetectorService";
+var viewGitRepositoryUrl="#viewGitRepositoryUrl"+seperator;
+var gitRepositoryUrlInput ="#gitRepositoryUrlInput"+seperator;
+var viewGitName="#viewGitName"+seperator;
+var gitNameInput="#gitNameInput"+seperator;
+var viewGitBranch="#viewGitBranch"+seperator;
+var gitBrancheInput="#gitBranchInput"+seperator;
+//svn scm
+var svnScm ="#svnScm"+seperator;
+var svnScmType="StringDetectorService.ReqResModel.SVNSettingDto, StringDetectorService";
+var viewSvnRepositoryUrl="#viewSvnRepositoryUrl"+seperator;
+var svnRepositoryUrlInput="#svnRepositoryUrlInput"+seperator;
+var viewSvnLocalModuleDir="#viewSvnLocalModuleDir"+seperator;
+var svnLocalModuleDirInput="#svnLocalModuleDirInput"+seperator;
 
 // hide div project configuration form
 var projectConfigForm ="#project-config-form"+seperator;
@@ -164,8 +183,13 @@ function getJobDetails ( job )
     var saveScmSpanObject= expandJobDetailObject.find(saveScmIcon);
     saveScmSpanObject.attr("id", saveScmSpanObject.attr("id")+jobName);
 
+
     var viewScmDivObject= expandJobDetailObject.find(viewScm);
     viewScmDivObject.attr("id", viewScmDivObject.attr("id")+jobName);
+
+    // perforce input
+    var perforceScmObject= expandJobDetailObject.find(perforceScm);
+    perforceScmObject.attr("id", perforceScmObject.attr("id")+jobName);
     var viewP4UsernameDivObject= expandJobDetailObject.find(viewP4Username);
     viewP4UsernameDivObject.attr("id", viewP4UsernameDivObject.attr("id")+jobName);
     var p4UsernameInputObject= expandJobDetailObject.find(p4UsernameInput);
@@ -186,6 +210,34 @@ function getJobDetails ( job )
     viewP4ViewmapDivObject.attr("id", viewP4ViewmapDivObject.attr("id")+jobName);
     var p4ViewmapInputObject= expandJobDetailObject.find(p4ViewmapInput);
     p4ViewmapInputObject.attr("id", p4ViewmapInputObject.attr("id")+jobName);
+
+    // git input
+    var gitScmObject= expandJobDetailObject.find(gitScm);
+    gitScmObject.attr("id", gitScmObject.attr("id")+jobName);
+    var viewGitRepositoryUrlDivObject= expandJobDetailObject.find(viewGitRepositoryUrl);
+    viewGitRepositoryUrlDivObject.attr("id", viewGitRepositoryUrlDivObject.attr("id")+jobName);
+    var gitRepositoryUrlInputObject= expandJobDetailObject.find(gitRepositoryUrlInput);
+    gitRepositoryUrlInputObject.attr("id", gitRepositoryUrlInputObject.attr("id")+jobName);
+    var viewGitNameDivObject= expandJobDetailObject.find(viewGitName);
+    viewGitNameDivObject.attr("id", viewGitNameDivObject.attr("id")+jobName);
+    var gitNameInputObject= expandJobDetailObject.find(gitNameInput);
+    gitNameInputObject.attr("id", gitNameInputObject.attr("id")+jobName);
+    var viewGitBranchDivObject= expandJobDetailObject.find(viewGitBranch);
+    viewGitBranchDivObject.attr("id", viewGitBranchDivObject.attr("id")+jobName);
+    var gitBranchInputObject= expandJobDetailObject.find(gitBrancheInput);
+    gitBranchInputObject.attr("id", gitBranchInputObject.attr("id")+jobName);
+
+    // svn input
+    var svnScmObject= expandJobDetailObject.find(svnScm);
+    svnScmObject.attr("id", svnScmObject.attr("id")+jobName);
+    var viewSvnRepositoryUrlDivObject= expandJobDetailObject.find(viewSvnRepositoryUrl);
+    viewSvnRepositoryUrlDivObject.attr("id", viewSvnRepositoryUrlDivObject.attr("id")+jobName);
+    var svnRepositoryUrlInputObject= expandJobDetailObject.find(svnRepositoryUrlInput);
+    svnRepositoryUrlInputObject.attr("id", svnRepositoryUrlInputObject.attr("id")+jobName);
+    var viewSvnLocalModuleDirDivObject= expandJobDetailObject.find(viewSvnLocalModuleDir);
+    viewSvnLocalModuleDirDivObject.attr("id", viewSvnLocalModuleDirDivObject.attr("id")+jobName);
+    var svnLocalModuleDirInputObject= expandJobDetailObject.find(svnLocalModuleDirInput);
+    svnLocalModuleDirInputObject.attr("id", svnLocalModuleDirInputObject.attr("id")+jobName);
 
 
     // project Config Form and some action source
@@ -257,11 +309,36 @@ function getJobDetails ( job )
     var jobSetting = job.Setting;
      jobNameInputObject.attr("value",jobSetting.JobName);
      timingInputObject.attr("value",jobSetting.BuildPeriody);
-     p4UsernameInputObject.attr("value",jobSetting.UserName);
-     p4PasswordInputObject.attr("value",jobSetting.Password);
-     p4PortInputObject.attr("value",jobSetting.SCMPort);
-     p4WorkspaceNameInputObject.attr("value",jobSetting.Workspace);
-     p4ViewmapInputObject.text(jobSetting.ViewMap);
+    // detect scm type
+    var scmSetting = jobSetting.ScmSetting;
+    switch (scmSetting.$type){
+        case gitScmType:
+            $(perforceScmObject).hide();
+            $(gitScmObject).show();
+            $(svnScmObject).hide();
+            gitRepositoryUrlInputObject.attr("value",scmSetting.RepositoryUrl);
+            gitNameInputObject.attr("value",scmSetting.Name);
+            gitBranchInputObject.attr("value",scmSetting.BranchSpecifier);
+            break;
+        case svnScmType:
+            $(perforceScmObject).hide();
+            $(gitScmObject).hide();
+            $(svnScmObject).show();
+            svnRepositoryUrlInputObject.attr("value",scmSetting.RepositoryUrl);
+            svnLocalModuleDirInputObject.attr("value",scmSetting.LocalModulDir);
+            break;
+        case perforceScmType:
+            $(perforceScmObject).show();
+            $(gitScmObject).hide();
+            $(svnScmObject).hide();
+            p4UsernameInputObject.attr("value",scmSetting.UserName);
+            p4PasswordInputObject.attr("value",scmSetting.Password);
+            p4PortInputObject.attr("value",scmSetting.SCMPort);
+            p4WorkspaceNameInputObject.attr("value",scmSetting.Workspace);
+            p4ViewmapInputObject.text(scmSetting.ViewMap);
+            break;
+    }
+
 
     // init the configuration panel
     projectConfigInputObject.text(job.Configuration.Configuration);

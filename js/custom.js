@@ -9,7 +9,8 @@ var  historyObjTable;
 var  hub;
 var modeEnum={small:0,middle:1,large:2}
 var mode=modeEnum.large;
-var serviceUrl="http://vhwebdevserver.eng.citrite.net";
+//var serviceUrl="http://vhwebdevserver.eng.citrite.net";
+var serviceUrl="http://localhost:61586";
 
 // data map
 var  jobsMap={};
@@ -157,37 +158,24 @@ function saveProjectBasicCallback(jobName){
     // paste the exsisting content into input filed
     var projectName=$(jobNameInput+jobName).val();
     var timing =$(timingInput+jobName).val();
-    var p4Username =$(p4UsernameInput+jobName).val();
-    var p4Password =$(p4PasswordInput+jobName).val();
-    var p4Port =$(p4PortInput+jobName).val();
-    var p4Workspace =$(p4WorkspaceNameInput+jobName).val();
-    var p4Viewmap =$(p4ViewmapInput+jobName).val();
 
     // use ajax to put the change and update the jobsmap and jobsObjTable Data in success callback
     var putData={};
     putData["JobName"]=projectName;
     putData["BuildPeriody"]=timing;
-    putData["SCMPort"]=p4Port;
-    putData["UserName"]=p4Username;
-    putData["Password"]=p4Password;
-    putData["Workspace"]=p4Workspace;
-    putData["ViewMap"]=p4Viewmap;
 
     $.ajax({
         type : "put",
         cache: false,
-        url: serviceUrl+"/api/jobs/" + jobName+"/setting",
+        url: serviceUrl+"/api/jobs/" + jobName+"/setting?fields=jobname,buildperiody",
         data : JSON.stringify(putData),
         dataType : "json",
         contentType:"application/json; charset=utf-8",
         cache :false,
         success : function(data) {
-    // the current api didn't return correct data to transfer the state
-            // for the reason that the put operation didn't change the job name we don't need to update jobMap
             //update the settingMap
             var settingDto = data;
             jobsMap[jobName].Setting=settingDto;
-
             // toggle the edit-save icon
             $(editProjectBasicIcon+jobName).show();
             $(saveProjectBasicIcon+jobName).hide();
@@ -230,22 +218,30 @@ function saveProjectScmClick(){
 function saveProjectScmCallback(jobName){
     // paste the exsisting content into input filed
     var projectName=$(jobNameInput+jobName).val();
-    var timing =$(timingInput+jobName).val();
-    var p4Username =$(p4UsernameInput+jobName).val();
-    var p4Password =$(p4PasswordInput+jobName).val();
-    var p4Port =$(p4PortInput+jobName).val();
-    var p4Workspace =$(p4WorkspaceNameInput+jobName).val();
-    var p4Viewmap =$(p4ViewmapInput+jobName).val();
-
+    var type =jobsMap[jobName].Setting.ScmSetting.$type;
     // use ajax to put the change and update the jobsmap and jobsObjTable Data in success callback
     var putData={};
+    // the $type must put in first place for type name handler to deserialize in to object
+    putData["$type"]=type;
     putData["JobName"]=projectName;
-    putData["BuildPeriody"]=timing;
-    putData["SCMPort"]=p4Port;
-    putData["UserName"]=p4Username;
-    putData["Password"]=p4Password;
-    putData["Workspace"]=p4Workspace;
-    putData["ViewMap"]=p4Viewmap;
+    switch (type){
+        case gitScmType:
+            putData["RepositoryUrl"] =$(gitRepositoryUrlInput+jobName).val();
+            putData["Name"] =$(gitNameInput+jobName).val();
+            putData["BranchSpecifier"] =$(gitBrancheInput+jobName).val();
+            break;
+        case svnScmType:
+            putData["RepositoryUrl"] =$(svnRepositoryUrlInput+jobName).val();
+            putData["LocalModulDir"] =$(svnLocalModuleDirInput+jobName).val();
+            break;
+        case perforceScmType:
+            putData["UserName"] =$(p4UsernameInput+jobName).val();
+            putData["Password"] =$(p4PasswordInput+jobName).val();
+            putData["SCMPort"] =$(p4PortInput+jobName).val();
+            putData["Workspace"] =$(p4WorkspaceNameInput+jobName).val();
+            putData["ViewMap"] =$(p4ViewmapInput+jobName).val();
+            break;
+    }
 
     $.ajax({
         type : "put",
@@ -730,7 +726,7 @@ function createJobValidateCallBack(){
     jobData["buildPeriody"] = $(timing).val();
     jobData["SCMPort"]      = $(p4Port).val();
     jobData["UserName"]     = $(p4Username).val();
-    jobData["Passoword"]	= $(p4Password).val();
+    jobData["Password"]	= $(p4Password).val();
     jobData["Workspace"]	= $(p4WrokspaceName).val();
     jobData["ViewMap"]		= $(p4Viewmap).val();
     jobData["Configuration"]= "To Be Defined";
@@ -1099,8 +1095,6 @@ function loadHistory (jobName,builds){
 }
 
 
-
-
 /*Click Actions handlers*/
 function  showJobDetailClick(event){
     // do not expand or collapse when clicking the action labels: job-satart, job-pause,job-stop
@@ -1262,12 +1256,12 @@ $(document).ready(function() {
         "uniqueJobName",
         function(value, element) {
             var  res=true;
-            var validation={};
-            validation["Input"]=value;
+            var validationData={};
+            validationData["Input"]=value;
             $.ajax({
                 type: "post",
                 url:  serviceUrl+"/api/validation/jobname/",
-                data : JSON.stringify(validation),
+                data : JSON.stringify(validationData),
                 dataType : "json",
                 contentType:"application/json; charset=utf-8",
                 async: false,
@@ -1347,7 +1341,25 @@ $(document).ready(function() {
             },
             p4Viewmap : {
                 required :true
+            },
+            gitRepositoryUrl:{
+                required:true,
+                url:true
+            },
+            gitName:{
+                required:true
+            },
+            gitBranch:{
+                required:true
+            },
+            svnRepositoryUrl:{
+                required:true,
+                url:true
+            },
+            svnLocalModuleDir:{
+                required:true
             }
+
         } ,
         submitHandler: function(form) {
             createJobValidateCallBack();
