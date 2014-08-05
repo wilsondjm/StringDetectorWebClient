@@ -9,11 +9,13 @@ var  historyObjTable;
 var  hub;
 var modeEnum={small:0,middle:1,large:2}
 var mode=modeEnum.large;
-//var serviceUrl="http://vhwebdevserver.eng.citrite.net";
+/*var serviceUrl="http://vhwebdevserver.eng.citrite.net";*/
 var serviceUrl="http://localhost:61586";
 
 // data map
 var  jobsMap={};
+// upstream project map
+var upstreamProjectMap={};
 // jenkins ballcolor  map
 var buildStatusMap ={"Failed":completed,
                     "InProgress":running,
@@ -161,13 +163,13 @@ function saveProjectBasicCallback(jobName){
 
     // use ajax to put the change and update the jobsmap and jobsObjTable Data in success callback
     var putData={};
-    putData["JobName"]=projectName;
-    putData["BuildPeriody"]=timing;
+    putData.JobName=projectName;
+    putData.BuildPeriody=timing;
 
     $.ajax({
         type : "put",
         cache: false,
-        url: serviceUrl+"/api/jobs/" + jobName+"/setting?fields=jobname,buildperiody",
+        url: serviceUrl+"/api/jobs/" + jobName+"/setting",
         data : JSON.stringify(putData),
         dataType : "json",
         contentType:"application/json; charset=utf-8",
@@ -175,7 +177,11 @@ function saveProjectBasicCallback(jobName){
         success : function(data) {
             //update the settingMap
             var settingDto = data;
-            jobsMap[jobName].Setting=settingDto;
+            var updateJobs= upstreamProjectMap[settingDto.JobName];
+            $.each(updateJobs,function(i,updateJobName){
+                jobsMap[updateJobName].Setting=settingDto;
+            });
+
             // toggle the edit-save icon
             $(editProjectBasicIcon+jobName).show();
             $(saveProjectBasicIcon+jobName).hide();
@@ -207,6 +213,13 @@ function editProjectScmClick(){
     $(p4WorkspaceNameInput+jobName).prop("readonly",false).removeClass("no-border");
     $(p4ViewmapInput+jobName).prop("readonly",false).removeClass("no-border");
 
+    $(gitRepositoryUrlInput+jobName).prop("readonly",false).removeClass("no-border");
+    $(gitNameInput+jobName).prop("readonly",false).removeClass("no-border");
+    $(gitBrancheInput+jobName).prop("readonly",false).removeClass("no-border");
+
+    $(svnRepositoryUrlInput+jobName).prop("readonly",false).removeClass("no-border");
+    $(svnLocalModuleDirInput+jobName).prop("readonly",false).removeClass("no-border");
+
 }
 
 function saveProjectScmClick(){
@@ -222,26 +235,29 @@ function saveProjectScmCallback(jobName){
     // use ajax to put the change and update the jobsmap and jobsObjTable Data in success callback
     var putData={};
     // the $type must put in first place for type name handler to deserialize in to object
-    putData["$type"]=type;
-    putData["JobName"]=projectName;
+
+    putData.JobName=projectName;
+    var scmData={};
+    scmData.$type=type;
     switch (type){
         case gitScmType:
-            putData["RepositoryUrl"] =$(gitRepositoryUrlInput+jobName).val();
-            putData["Name"] =$(gitNameInput+jobName).val();
-            putData["BranchSpecifier"] =$(gitBrancheInput+jobName).val();
+            scmData.RepositoryUrl =$(gitRepositoryUrlInput+jobName).val();
+            scmData.Name =$(gitNameInput+jobName).val();
+            scmData.BranchSpecifier =$(gitBrancheInput+jobName).val();
             break;
         case svnScmType:
-            putData["RepositoryUrl"] =$(svnRepositoryUrlInput+jobName).val();
-            putData["LocalModulDir"] =$(svnLocalModuleDirInput+jobName).val();
+            scmData.RepositoryUrl =$(svnRepositoryUrlInput+jobName).val();
+            scmData.LocalModulDir =$(svnLocalModuleDirInput+jobName).val();
             break;
         case perforceScmType:
-            putData["UserName"] =$(p4UsernameInput+jobName).val();
-            putData["Password"] =$(p4PasswordInput+jobName).val();
-            putData["SCMPort"] =$(p4PortInput+jobName).val();
-            putData["Workspace"] =$(p4WorkspaceNameInput+jobName).val();
-            putData["ViewMap"] =$(p4ViewmapInput+jobName).val();
+            scmData.UserName =$(p4UsernameInput+jobName).val();
+            scmData.Password =$(p4PasswordInput+jobName).val();
+            scmData.SCMPort =$(p4PortInput+jobName).val();
+            scmData.Workspace =$(p4WorkspaceNameInput+jobName).val();
+            scmData.ViewMap =$(p4ViewmapInput+jobName).val();
             break;
     }
+    putData.ScmSetting = scmData;
 
     $.ajax({
         type : "put",
@@ -256,8 +272,10 @@ function saveProjectScmCallback(jobName){
             // for the reason that the put operation didn't change the job name we don't need to update jobMap
             //update the settingMap
             var settingDto = data;
-            jobsMap[jobName].Setting=settingDto;
-
+            var updateJobs= upstreamProjectMap[settingDto.JobName];
+            $.each(updateJobs,function(i,updateJobName){
+                jobsMap[updateJobName].Setting=settingDto;
+            });
             // toggle the edit-save icon
             $(editScmIcon+jobName).show();
             $(saveScmIcon+jobName).hide();
@@ -269,6 +287,11 @@ function saveProjectScmCallback(jobName){
             $(p4PortInput+jobName).prop("readonly",true).addClass("no-border");
             $(p4WorkspaceNameInput+jobName).prop("readonly",true).addClass("no-border");
             $(p4ViewmapInput+jobName).prop("readonly",true).addClass("no-border");
+            $(gitRepositoryUrlInput+jobName).prop("readonly",true).addClass("no-border");
+            $(gitNameInput+jobName).prop("readonly",true).addClass("no-border");
+            $(gitBrancheInput+jobName).prop("readonly",true).addClass("no-border");
+            $(svnRepositoryUrlInput+jobName).prop("readonly",true).addClass("no-border");
+            $(svnLocalModuleDirInput+jobName).prop("readonly",true).addClass("no-border");
         },
         error : function(XMLHttpRequest,
                          textStatus, errorThrown) {
@@ -1014,8 +1037,19 @@ function loadJobs(jobs){
         job.Result=buildStatusMap[job.Status.Status];
         jobRecords.push(transferToJobRecord(job));
         jobsMap[job.JobName]=job;
-    });
 
+        /*var settingJobName=job.Setting.JobName;
+        var jobName=job.JobName;
+        if(jobName!=settingJobName ){
+            if(upstreamProjectMap[settingJobName]!=undefined){
+                upstreamProjectMap[settingJobName].push(jobName);
+            }else {
+                upstreamProjectMap[settingJobName]=[];
+                upstreamProjectMap[settingJobName].push(jobName);
+            }
+        }*/
+    });
+    var firstJob=jobs[0]
     jobsObjTable= $(dtBasic).dataTable({
         "sPaginationType" : "bootstrap_two_button",
         "sDom":'tip',
@@ -1035,6 +1069,17 @@ function loadJobs(jobs){
                 // toolbar plugin  effect
                 $(jobToolBar+jobName).toolbar({content: jotToolBarOption+jobName, position: 'top',hideOnClick:true});
             }
+            $.ajax({
+                type : "get",
+                cache: false,
+                //url: "../api/jobs",
+                url:serviceUrl+"/api/jobs/"+firstJob.JobName,
+                data : "",
+                success : function(data) {
+                    jobsMap[firstJob.JobName]=data;
+                    jobsObjTable.$('tr:first').click();
+                }
+            });
         },
         "aaData": jobRecords,
         "aoColumnDefs" : [
@@ -1055,11 +1100,12 @@ function loadJobs(jobs){
             }
         ]
     });
-    jobsObjTable.$('tr:first').click();
+    //jobsObjTable.$('tr:first').click();
     $.each(jobs,function(i,job){
         if(jobsMap[job.JobName].Result==running){
             hub.server.fetchJobReport(jobName);
         }
+
     });
     updateCategory();
 }
@@ -1172,30 +1218,49 @@ $(document).ready(function() {
 
     /*
      * Load the jobs when page initiated
-     * 
+     * we need to load the all jobs with job name and job status
      * */
-    $.ajax({
+     var firstJob;
+     $.ajax({
         type : "get",
         cache: false,
+        async: false,
         //url: "../api/jobs",
-        url:serviceUrl+"/api/tools/faketool",
+        url:serviceUrl+"/api/tools/faketool?fields=toolname,viewname,jobs(jobname,status)",
         data : "",
         success : function(data) {
 
             $(window).resize(windowResize);
-            //loadJobs(data);
             var jobsData =data.Jobs;
             loadJobs(jobsData);
-        },
-        error : function(XMLHttpRequest,
-                         textStatus, errorThrown) {
-
-        },
-        complete: function (){
+            firstJob= jobsData[0];
         }
     });
 
-
+   // after the page intialized ,fetch all jobs data and update
+    $.ajax({
+        type : "get",
+        cache: false,
+        url:serviceUrl+"/api/tools/faketool",
+        data : "",
+        success : function(data) {
+            var jobs =data.Jobs;
+            $.each(jobs,function(i,job){
+                job.Result=buildStatusMap[job.Status.Status];
+                jobsMap[job.JobName]=job;
+                var settingJobName=job.Setting.JobName;
+                 var jobName=job.JobName;
+                 if(jobName!=settingJobName ){
+                 if(upstreamProjectMap[settingJobName]!=undefined){
+                 upstreamProjectMap[settingJobName].push(jobName);
+                 }else {
+                 upstreamProjectMap[settingJobName]=[];
+                 upstreamProjectMap[settingJobName].push(jobName);
+                 }
+                 }
+            });
+        }
+    });
 
     $(document).delegate(topJobFilter,'keyup',oTableFilter);
     $(document).delegate(categoryAll,'click',categoryAllClick);
