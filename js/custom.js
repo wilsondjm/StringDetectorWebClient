@@ -9,7 +9,7 @@ var  historyObjTable;
 var  hub;
 var modeEnum={small:0,middle:1,large:2}
 var mode=modeEnum.large;
-/*var serviceUrl="http://vhwebdevserver.eng.citrite.net";*/
+//var serviceUrl="http://vhwebdevserver.eng.citrite.net";
 var serviceUrl="http://localhost:61586";
 
 // data map
@@ -97,21 +97,39 @@ function registeJobFormValidationListener(jobName){
 
     $(scmSettingForm+jobName).validate({
         rules: {
-             p4Username : {
-             required :true
-             },
-             p4Password : {
-             required :true
-             },
-             p4Port : {
-             required :true
-             },
-             p4WorkspaceName : {
-             required :true
-             },
-             p4Viewmap : {
-             required :true
-             }
+
+            p4Username : {
+                required :true
+            },
+            p4Password : {
+                required :true
+            },
+            p4Port : {
+                required :true
+            },
+            p4WorkspaceName : {
+                required :true
+            },
+            p4Viewmap : {
+                required :true
+            },
+            gitRepositoryUrl:{
+                required:true,
+                url:true
+            },
+            gitName:{
+                required:true
+            },
+            gitBranch:{
+                required:true
+            },
+            svnRepositoryUrl:{
+                required:true,
+                url:true
+            },
+            svnLocalModuleDir:{
+                required:true
+            }
         } ,
         submitHandler: function(form) {
             saveProjectScmCallback(jobName);
@@ -745,16 +763,11 @@ function createJobSubmitClick(){
 
 function createJobValidateCallBack(){
     var jobData = {};
-    jobData["JobName"]      = $(jobName).val();
-    jobData["buildPeriody"] = $(timing).val();
-    jobData["SCMPort"]      = $(p4Port).val();
-    jobData["UserName"]     = $(p4Username).val();
-    jobData["Password"]	= $(p4Password).val();
-    jobData["Workspace"]	= $(p4WrokspaceName).val();
-    jobData["ViewMap"]		= $(p4Viewmap).val();
-    jobData["Configuration"]= "To Be Defined";
+    jobData.JobName     = $(jobName).val();
+    jobData.UpstreamProject = $(upstreamProject).val();
 
-    var requestURL = serviceUrl+"/api/jobs/" + jobData["JobName"]+"?field=jobName";
+
+    var requestURL = serviceUrl+"/api/jobs/" + jobData["JobName"]+"?fields=jobName";
     var reqData = JSON.stringify(jobData);
     $.ajax({
         type : "post",
@@ -1113,11 +1126,11 @@ function loadJobs(jobs){
 function loadHistory (jobName,builds){
     // use the fake data
     var historyRecord=[];
-
-    $.each(builds,function(i,build){
-        historyRecord.push(transferToBuildRecord(build,jobName));
-    });
-
+    if(builds!=undefined){
+        $.each(builds,function(i,build){
+            historyRecord.push(transferToBuildRecord(build,jobName));
+        });
+    }
     historyObjTable= $(historyTable+jobName).dataTable({
         "sDom":'t',
         "sScrollY": "550",
@@ -1388,41 +1401,8 @@ $(document).ready(function() {
                 required :true,
                 uniqueJobName:true
             },
-            timing : {
-                required :true,
-                checkTiming:true
-            },
-            p4Username : {
+            upstreamProject : {
                 required :true
-            },
-            p4Password : {
-                required :true
-            },
-            p4Port : {
-                required :true
-            },
-            p4WorkspaceName : {
-                required :true
-            },
-            p4Viewmap : {
-                required :true
-            },
-            gitRepositoryUrl:{
-                required:true,
-                url:true
-            },
-            gitName:{
-                required:true
-            },
-            gitBranch:{
-                required:true
-            },
-            svnRepositoryUrl:{
-                required:true,
-                url:true
-            },
-            svnLocalModuleDir:{
-                required:true
             }
 
         } ,

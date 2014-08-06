@@ -17,12 +17,8 @@ var actionToolBar="#action_top_toolbar";
 // create job modal
 var createJobModal='#createJobModal';
 var jobName="#jobName";
-var timing="#timing";
-var p4Port="#p4Port";
-var p4Username="#p4Username";
-var p4Password="#p4Password";
-var p4WrokspaceName="#p4WorkspaceName";
-var p4Viewmap="#p4Viewmap";
+var upstreamProject="#upstreamProject";
+;
 
 var seperator="--"
 //top job action bar
