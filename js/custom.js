@@ -72,7 +72,9 @@ function registeJobFormValidationListener(jobName){
     $(basicSettingForm+jobName).validate({
         rules: {
             jobName : {
-                required :true
+                required :true//,
+                //regex: "[^-]+(-[^-]+){4}",
+                //customJobName:true
             },
             timing : {
                 required :true,
@@ -82,8 +84,7 @@ function registeJobFormValidationListener(jobName){
         submitHandler: function(form) {
             //createJobValidateCallBack();
             saveProjectBasicCallback(jobName);
-        }
-        ,
+        },
         highlight: function(element) {
             $(element).closest('.form-group').removeClass('has-success').addClass('has-error');
         },
@@ -97,7 +98,6 @@ function registeJobFormValidationListener(jobName){
 
     $(scmSettingForm+jobName).validate({
         rules: {
-
             p4Username : {
                 required :true
             },
@@ -748,7 +748,30 @@ function viewBiuldReportClick(){
 
 // new job button click
 function createJobClick() {
-    $(createJobModal).modal('show');
+    $.ajax({
+        type : "get",
+        cache: false,
+        url: serviceUrl+"/api/views/SRC?fields=jobs(jobname)" ,
+        data: null,
+        dataType: "json",
+        contentType: "application/json",
+        cache: false,
+        success : function(data) {
+            var jobs =data.Jobs;
+            $.each(jobs,function(i,job){
+                var jobName= job.JobName;
+                $(upstreamProject).append("<option value="+jobName+">"+jobName+"</option>");
+            });
+        },
+        error : function(XMLHttpRequest,
+                         textStatus, errorThrown) {
+            alert("Deleted Failed");
+        },
+        complete: function(){
+            $(createJobModal).modal('show');
+        }
+    });
+
 }
 
 // cancel button in create job form
@@ -1338,7 +1361,7 @@ $(document).ready(function() {
             validationData["Input"]=value;
             $.ajax({
                 type: "post",
-                url:  serviceUrl+"/api/validation/jobname/",
+                url:  serviceUrl+"/api/validation/jenkins/jobname",
                 data : JSON.stringify(validationData),
                 dataType : "json",
                 contentType:"application/json; charset=utf-8",
@@ -1363,6 +1386,36 @@ $(document).ready(function() {
     );
 
     $.validator.addMethod(
+        "customJobName",
+        function(value, element) {
+            var  res=true;
+            var validationData={};
+            validationData["Input"]=value;
+            $.ajax({
+                type: "post",
+                url:  serviceUrl+"/api/validation/custom/jobname",
+                data : JSON.stringify(validationData),
+                dataType : "json",
+                contentType:"application/json; charset=utf-8",
+                async: false,
+                success: function(result)
+                {
+                    //If username exists, set response to true
+                    res =  true;
+                },
+                error : function(XMLHttpRequest,
+                                 textStatus, errorThrown) {
+                    res=false;
+                }
+            });
+            return res;
+        },
+         "Please input valid project name and tool name"
+
+    );
+
+
+    $.validator.addMethod(
         "checkTiming",
         function(value, element) {
             var  res=true;
@@ -1370,7 +1423,7 @@ $(document).ready(function() {
             validation["Input"]=value;
             $.ajax({
                 type: "post",
-                url:  serviceUrl+"/api/validation/timing/",
+                url:  serviceUrl+"/api/validation/jenkins/timing",
                 data : JSON.stringify(validation),
                 dataType : "json",
                 contentType:"application/json; charset=utf-8",
@@ -1395,17 +1448,30 @@ $(document).ready(function() {
         checkTimingMessageFunc
     );
 
+    $.validator.addMethod(
+      "regex",
+      function(value,element,regexp){
+          var regex = new RegExp(regexp);
+          return this.optional(element)||regex.test(value);
+      },
+       "please name the job in order of  product name,version, component,tag,tool"
+    );
+
     $(createJobForm).validate({
         rules: {
             jobName : {
                 required :true,
-                uniqueJobName:true
+                uniqueJobName:true,
+                regex: "[^-]+(-[^-]+){4}",
+                customJobName:true
             },
             upstreamProject : {
                 required :true
             }
 
         } ,
+        onkeyup: false,
+        onfocusout: true,
         submitHandler: function(form) {
             createJobValidateCallBack();
         }
