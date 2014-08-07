@@ -1361,8 +1361,7 @@ function windowResize(){
 
 $(document).ready(function() {
 	pageSetUp();
-    $.root_.removeClassPrefix('smart-style')
-            .addClass('smart-style-3');
+
 
     /*
      * Load the jobs when page initiated
@@ -1591,7 +1590,7 @@ $(document).ready(function() {
         }
     });
 
-    $(".minifyme").click();
+    /*$(".minifyme").click();*/
     $(dtBasic+ ' tbody tr:first').click();
     $.connection.hub.url=serviceUrl+"/signalr";
     hub = $.connection.jobHub;
