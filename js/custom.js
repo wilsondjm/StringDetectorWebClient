@@ -11,6 +11,8 @@ var modeEnum={small:0,medium:1,large:2}
 var mode=modeEnum.large;
 /*var serviceUrl="http://vhwebdevserver.eng.citrite.net";*/
 var serviceUrl="http://localhost:61586";
+// signalR connection id
+var connectionId;
 
 // data map
 var  jobsMap={};
@@ -208,7 +210,6 @@ function saveProjectBasicCallback(jobName){
                          textStatus, errorThrown) {
         }
     });
-
 }
 function editProjectScmClick(){
     var spiltArray = $(this).attr("id").split(seperator);
@@ -1575,7 +1576,8 @@ $(document).ready(function() {
                 hub.server.fetchJobReport(jobName);
             }
         }
-        console.log("connected");
+        connectionId=$.connection.hub.id;
+        console.log('Now connected, connection ID=' + connectionId);
     }).fail(function (error){
         console.log("connect error");
     });
