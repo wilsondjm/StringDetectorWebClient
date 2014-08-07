@@ -880,7 +880,7 @@ function transferToBuildRecord(build,jobName){
     var duration  = build.Duration+"s";
     var result = build.Result;
 
-    var  displayNameLink='<a href="javascript:void(0)" data-build-number="'+buildNumber+'" data-job-name="'+jobName+'">'+displayName+'</a>';
+    var  displayNameLink='<a href="javascript:void(0)" data-build-number="'+buildNumber+'" data-job-name="'+jobName+'">'+displayName.replace(jobName,"Build")+'</a>';
     var record = [];
   /*  record.push(buildNumber);*/
     record.push(displayNameLink);
@@ -1151,7 +1151,7 @@ function loadHistory (jobName,builds){
             {"bSortable":false, "bVisible":false}
         ]
     });
-
+    historyObjTable.fnAdjustColumnSizing();
     registBuildHistoryFormListener(jobName);
 
 }
@@ -1342,7 +1342,7 @@ function windowResize(){
         jobsObjTable.fnSetColumnVis(5,false);
         $(actionToolBar).show();
     }
-    else  if($(dtBasic).width()<420){
+    else  if($(dtBasic).width()<630){
         mode=modeEnum.middle;
         jobsObjTable.fnSetColumnVis(0,false);
         jobsObjTable.fnSetColumnVis(4,false);
@@ -1402,10 +1402,11 @@ $(document).ready(function() {
     $(document).on( 'shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
         var jobName = e.target.href.split(seperator).slice(-1)[0];
         var inited= e.target.attributes["data-init"].value;
-        if(e.target.name=="History"&&historyObjTable!=undefined){
-            historyObjTable.fnAdjustColumnSizing();
-        }
+
         if(inited=="true"){
+            if(e.target.name=="History"&&historyObjTable!=undefined){
+                historyObjTable.fnAdjustColumnSizing();
+            }
             return;
         }
         var job =jobsMap[jobName];
@@ -1418,6 +1419,7 @@ $(document).ready(function() {
                 break;
             case "History":
                 detectJobHistory(job);
+
                 break;
             case "Report":
                 detectJobReport(job);
