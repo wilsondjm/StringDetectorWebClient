@@ -1080,11 +1080,7 @@ function loadJobs(jobs){
         ]
     });
 
-    $.each(jobs,function(i,job){
-        if(jobsMap[job.JobName].Result==running){
-            hub.server.fetchJobReport(jobName);
-        }
-    });
+
 
     updateCategory();
 }
@@ -1573,6 +1569,12 @@ $(document).ready(function() {
     hub.client.appendReport = appendReportData;
     hub.client.updateReportCallback =updateReportCallback;
     $.connection.hub.start().done(function(){
+        for(var jobName in jobsMap){
+            var job = jobsMap[jobName];
+            if(job.Result==running){
+                hub.server.fetchJobReport(jobName);
+            }
+        }
         console.log("connected");
     }).fail(function (error){
         console.log("connect error");
