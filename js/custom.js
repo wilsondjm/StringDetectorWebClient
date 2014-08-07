@@ -7,7 +7,7 @@
 var  jobsObjTable;
 var  historyObjTable;
 var  hub;
-var modeEnum={small:0,middle:1,large:2}
+var modeEnum={small:0,medium:1,large:2}
 var mode=modeEnum.large;
 /*var serviceUrl="http://vhwebdevserver.eng.citrite.net";*/
 var serviceUrl="http://localhost:61586";
@@ -49,13 +49,7 @@ function registJobFormListener(jobName){
     $(document).delegate(jobStart+jobName,'click',jobStartClick);
     $(document).delegate(jobStop+jobName,'click',jobStopClick);
     $(document).delegate(jobDelete+jobName,'click',jobDeleteClick);
-    $(document).delegate(actionStart+jobName,'click',jobStartClick);
-    $(document).delegate(actionStop+jobName,'click',jobStopClick);
-    $(document).delegate(actionDelete+jobName,'click',jobDeleteClick);
 
-    $(document).delegate(jobToolBar+jobName,'show',function(){
-       // alert("change");
-    })
 
 }
 
@@ -511,7 +505,6 @@ function batchJobStartClick(){
 
                 // we shall update the table at last ,the fnUpdate will trigger the current filter
                 jobsObjTable.fnUpdate(aData,nTr);
-                $(jobToolBar+jobName).toolbar({content: jotToolBarOption+jobName, position: 'top',hideOnClick:true});
                 updateCategory();
 
             },
@@ -538,11 +531,6 @@ function jobStartClick(){
         return ;
     }
     var nTrObject=$(this).parents("tr");
-    // judge the event source
-    if(mode==modeEnum.middle){
-        nTrObject = $(jobToolBar+jobName).parents("tr");
-    }
-
     var nTr = nTrObject[0];
 
     // start the job
@@ -573,7 +561,6 @@ function jobStartClick(){
 
             // we shall update the table at last ,the fnUpdate will trigger the current filter
             jobsObjTable.fnUpdate(aData,nTr);
-            $(jobToolBar+jobName).toolbar({content: jotToolBarOption+jobName, position: 'top',hideOnClick:true});
             updateCategory();
         },
         error : function(XMLHttpRequest,
@@ -582,13 +569,6 @@ function jobStartClick(){
         }
 
     });
-
-     // judge the event source
-     if($(this).attr("id").split('-')[0]=="action"){
-         $(this).parent().parent().hide();
-         $(jobToolBar+jobName).removeClass("pressed");
-     }
-
 
 }
 
@@ -631,9 +611,6 @@ function jobStopClick(){
     var spiltArray = $(this).attr("id").split(seperator);
     var jobName = spiltArray[spiltArray.length-1];
     var nTrObject=$(this).parents("tr");
-    if(mode==modeEnum.middle){
-        nTrObject = $(jobToolBar+jobName).parents("tr");
-    }
     var nTr=nTrObject[0];
     
     $.ajax({
@@ -654,11 +631,7 @@ function jobStopClick(){
             $(jobStart+jobName).removeClass("active");
         }
     });
-    // judge the event source
-    if($(this).attr("id").split('-')[0]=="action"){
-        $(this).parent().parent().hide();
-        $(jobToolBar+jobName).removeClass("pressed");
-    }
+
 }
 
 // multiple job selection  for delete action
@@ -698,9 +671,7 @@ function jobDeleteClick(){
     var spiltArray = $(this).attr("id").split(seperator);
     var jobName = spiltArray[spiltArray.length-1];
     var nTrObject=$(this).parents("tr");
-    if(mode==modeEnum.middle){
-        nTrObject = $(jobToolBar+jobName).parents("tr");
-    }
+
     var nTr=nTrObject[0];
     var aPos = jobsObjTable.fnGetPosition(nTr);
     $.ajax({
@@ -722,11 +693,7 @@ function jobDeleteClick(){
             alert("Deleted Failed");
         }
     });
-    // judge the event source
-    if($(this).attr("id").split('-')[0]=="action"){
-        $(this).parent().parent().hide();
-        $(jobToolBar+jobName).removeClass("pressed");
-    }
+
 }
 
 // load specific build report
@@ -933,7 +900,6 @@ function updateReportCallback(jobName){
             var job = jobsMap[jobName];
             var aData=transferToJobRecord(job);
             jobsObjTable.fnUpdate(aData,index);
-            $(jobToolBar+jobName).toolbar({content: jotToolBarOption+jobName, position: 'top',hideOnClick:true});
             updateCategory();
             //update current show job detail hisory
             var splitArray=$(jobTablePanel+" .tab-content .tab-pane:first ").attr("id").split(seperator);
@@ -1091,10 +1057,7 @@ function loadJobs(jobs){
            $('.dataTables_paginate').prependTo($(pageGroup))
         },
         'fnInitComplete':function(oSettings){
-            for( var jobName in jobsMap){
-                // toolbar plugin  effect
-                $(jobToolBar+jobName).toolbar({content: jotToolBarOption+jobName, position: 'top',hideOnClick:true});
-            }
+
 
         },
         "aaData": jobRecords,
@@ -1163,7 +1126,6 @@ function  showJobDetailClick(event){
     if(event.target.className.indexOf("action")>-1|event.target.className.indexOf("fa")>-1|event.target.tagName.toLowerCase()=="span"||event.target.tagName.toLowerCase()=="input"){
         return;
     }
-
     var nTr = $(this)[0];
     if ( $(this).hasClass('custom-selected') ) {
       //  $(this).removeClass('custom-selected');
@@ -1335,23 +1297,38 @@ var update_size = function() {
 function windowResize(){
     clearTimeout(window.refresh_size);
     window.refresh_size = setTimeout(function() { update_size(); }, 10);
-    if($(dtBasicWrapper).width()<$(dtBasic).width()){
+    if($(dtBasicWrapper).width()<$(dtBasic).width()||$(dtBasic).width()<320){
         mode=modeEnum.small;
         jobsObjTable.fnSetColumnVis(0,true);
+        jobsObjTable.fnSetColumnVis(2,false);
+        jobsObjTable.fnSetColumnVis(3,false);
+        jobsObjTable.fnSetColumnVis(4,false);
+        jobsObjTable.fnSetColumnVis(5,false);
+        $(actionToolBar).show();
+    }
+    else if($(dtBasic).width()<420){
+        mode=modeEnum.medium;
+        jobsObjTable.fnSetColumnVis(0,true);
+        jobsObjTable.fnSetColumnVis(2,true);
+        jobsObjTable.fnSetColumnVis(3,false);
         jobsObjTable.fnSetColumnVis(4,false);
         jobsObjTable.fnSetColumnVis(5,false);
         $(actionToolBar).show();
     }
     else  if($(dtBasic).width()<630){
-        mode=modeEnum.middle;
-        jobsObjTable.fnSetColumnVis(0,false);
+        mode=modeEnum.medium;
+        jobsObjTable.fnSetColumnVis(0,true);
+        jobsObjTable.fnSetColumnVis(2,true);
+        jobsObjTable.fnSetColumnVis(3,true);
         jobsObjTable.fnSetColumnVis(4,false);
-        jobsObjTable.fnSetColumnVis(5,true);
-        $(actionToolBar).hide();
+        jobsObjTable.fnSetColumnVis(5,false);
+        $(actionToolBar).show();
     }
     else {
         mode=modeEnum.large;
         jobsObjTable.fnSetColumnVis(0,false);
+        jobsObjTable.fnSetColumnVis(2,true);
+        jobsObjTable.fnSetColumnVis(3,true);
         jobsObjTable.fnSetColumnVis(4,true);
         jobsObjTable.fnSetColumnVis(5,false);
         $(actionToolBar).hide();
@@ -1361,8 +1338,6 @@ function windowResize(){
 
 $(document).ready(function() {
 	pageSetUp();
-
-
     /*
      * Load the jobs when page initiated
      * we need to load the all jobs with job name and job status
@@ -1589,8 +1564,6 @@ $(document).ready(function() {
                 .closest('.form-group').removeClass('has-error').addClass('has-success');
         }
     });
-
-    /*$(".minifyme").click();*/
     $(dtBasic+ ' tbody tr:first').click();
     $.connection.hub.url=serviceUrl+"/signalr";
     hub = $.connection.jobHub;

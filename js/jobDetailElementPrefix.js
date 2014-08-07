@@ -40,14 +40,12 @@ var topCreateJob="#top_create_job";
 var createJobCancel="#createJobCancel";
 var createJobSubmit="#createJobSubmit";
 var createJobForm="#createJobForm";
-var hidenSubmitButton="#jobFormSubmit";
 var createJobModal="#createJobModal";
 // history table
 var historyTable ="#dt_history"+seperator;
 
 // hide div
 var expandJobDetail ="#expand_job_detail"+seperator;
-var toolbarOptionDetail ="#toolbar-option-detail";
 
 // tab head
 var step1Head="#step1Head";
@@ -126,13 +124,6 @@ var projectReport ="#project-report"+seperator;
 var viewProjectReport ="#viewProjectReport"+seperator;
 var projectReportInput ="#projectReportInput"+seperator;
 
-// hide div toolbar option prefix
-var actionStart="#action-start"+seperator;
-var actionStop="#action-stop"+seperator;
-var actionDelete="#action-delete"+seperator;
-
-var jobToolBar="#job-toolbar"+seperator;
-var jotToolBarOption="#job-toolbar-options"+seperator;
 // table action button group
 var jobStart="#job-start"+seperator;
 var jobStop="#job-stop"+seperator;
