@@ -9,7 +9,7 @@ var  historyObjTable;
 var  hub;
 var modeEnum={small:0,middle:1,large:2}
 var mode=modeEnum.large;
-//var serviceUrl="http://vhwebdevserver.eng.citrite.net";
+/*var serviceUrl="http://vhwebdevserver.eng.citrite.net";*/
 var serviceUrl="http://localhost:61586";
 
 // data map
@@ -56,7 +56,6 @@ function registJobFormListener(jobName){
     $(document).delegate(jobToolBar+jobName,'show',function(){
        // alert("change");
     })
-
 
 }
 
@@ -939,7 +938,8 @@ function updateReportCallback(jobName){
             //update current show job detail hisory
             var splitArray=$(jobTablePanel+" .tab-content .tab-pane:first ").attr("id").split(seperator);
             var showName=splitArray[splitArray.length-1];
-            if(jobName==showName){
+            if(jobName==showName&&historyObjTable!=undefined){
+                //detectJobHistory(job);
                 historyObjTable.fnClearTable();
                 historyObjTable.fnDraw();
                 var historyDto = job.Builds.JobHistories;
@@ -1074,18 +1074,8 @@ function loadJobs(jobs){
         jobRecords.push(transferToJobRecord(job));
         jobsMap[job.JobName]=job;
 
-        /*var settingJobName=job.Setting.JobName;
-        var jobName=job.JobName;
-        if(jobName!=settingJobName ){
-            if(upstreamProjectMap[settingJobName]!=undefined){
-                upstreamProjectMap[settingJobName].push(jobName);
-            }else {
-                upstreamProjectMap[settingJobName]=[];
-                upstreamProjectMap[settingJobName].push(jobName);
-            }
-        }*/
     });
-    var firstJob=jobs[0]
+   /* var firstJob = jobs[0];*/
     jobsObjTable= $(dtBasic).dataTable({
         "sPaginationType" : "bootstrap_two_button",
         "sDom":'tip',
@@ -1105,17 +1095,7 @@ function loadJobs(jobs){
                 // toolbar plugin  effect
                 $(jobToolBar+jobName).toolbar({content: jotToolBarOption+jobName, position: 'top',hideOnClick:true});
             }
-            $.ajax({
-                type : "get",
-                cache: false,
-                //url: "../api/jobs",
-                url:serviceUrl+"/api/jobs/"+firstJob.JobName,
-                data : "",
-                success : function(data) {
-                    jobsMap[firstJob.JobName]=data;
-                    jobsObjTable.$('tr:first').click();
-                }
-            });
+
         },
         "aaData": jobRecords,
         "aoColumnDefs" : [
@@ -1136,13 +1116,13 @@ function loadJobs(jobs){
             }
         ]
     });
-    //jobsObjTable.$('tr:first').click();
+
     $.each(jobs,function(i,job){
         if(jobsMap[job.JobName].Result==running){
             hub.server.fetchJobReport(jobName);
         }
-
     });
+
     updateCategory();
 }
 
@@ -1183,6 +1163,7 @@ function  showJobDetailClick(event){
     if(event.target.className.indexOf("action")>-1|event.target.className.indexOf("fa")>-1|event.target.tagName.toLowerCase()=="span"||event.target.tagName.toLowerCase()=="input"){
         return;
     }
+
     var nTr = $(this)[0];
     if ( $(this).hasClass('custom-selected') ) {
       //  $(this).removeClass('custom-selected');
@@ -1195,12 +1176,143 @@ function  showJobDetailClick(event){
         var jobName = aData[1];
         var job=jobsMap[jobName];
         $(jobTablePanel).html(getJobDetails(job));
+        // when clicking the job detail ,the setting tab will show as default  tab, so we will fetch setting data at first
+        detectJobSetting(job);
         registeJobFormValidationListener(jobName);
-        var historyDto = job.Builds.JobHistories;
-        loadHistory(jobName,historyDto);
+
+    }
+}
+function detectJobSetting(job){
+    if(job.Setting==undefined){
+        $.ajax({
+            type : "get",
+            cache: false,
+            url:serviceUrl+"/api/jobs/"+job.JobName+"?fields=setting",
+            data : "",
+            success : function(data) {
+                job.Setting=data.Setting;
+                var jobName=job.JobName;
+                var settingJobName=job.Setting.JobName;
+                jobsMap[jobName]=job;
+                if(jobName!=settingJobName ){
+                    if(upstreamProjectMap[settingJobName]!=undefined){
+                        upstreamProjectMap[settingJobName].push(jobName);
+                    }else {
+                        upstreamProjectMap[settingJobName]=[];
+                        upstreamProjectMap[settingJobName].push(jobName);
+                    }
+                }
+                initSettingTabData(job);
+            }
+        });
+    }else{
+        initSettingTabData(job);
+    }
+}
+function detectJobConfiguration(job){
+    if(job.Configuration==undefined){
+        $.ajax({
+            type : "get",
+            cache: false,
+            url:serviceUrl+"/api/jobs/"+job.JobName+"?fields=configuration",
+            data : "",
+            success : function(data) {
+                job.Configuration=data.Configuration;
+                jobsMap[job.JobName]=job;
+                initConfigurationTabData(job);
+            }
+        });
+    }else {
+        initConfigurationTabData(job);
     }
 }
 
+function detectJobHistory(job){
+    if(job.Builds==undefined){
+        $.ajax({
+            type : "get",
+            cache: false,
+            url:serviceUrl+"/api/jobs/"+job.JobName+"?fields=builds",
+            data : "",
+            success : function(data) {
+                job.Builds=data.Builds;
+                jobsMap[job.JobName]=job;
+                initHistoryTabData(job);
+            }
+        });
+    }else {
+        initHistoryTabData(job);
+    }
+}
+
+function detectJobReport(job){
+    if(job.Report==undefined){
+        $.ajax({
+            type : "get",
+            cache: false,
+            url:serviceUrl+"/api/jobs/"+job.JobName+"?fields=report",
+            data : "",
+            success : function(data) {
+                job.Report=data.Report;
+                jobsMap[job.JobName]=job;
+                initReportTabData(job);
+            }
+        });
+    }else {
+        initReportTabData(job);
+    }
+}
+
+function initSettingTabData(job){
+    // initial the job setting fileds
+    var jobSetting = job.Setting;
+    var jobName = job.JobName;
+    $(jobNameInput+jobName).attr("value",jobSetting.JobName);
+    $(timingInput+jobName).attr("value",jobSetting.BuildPeriody);
+    // detect scm type
+    var scmSetting = jobSetting.ScmSetting;
+    switch (scmSetting.$type){
+        case gitScmType:
+            $(perforceScm+jobName).hide();
+            $(gitScm+jobName).show();
+            $(svnScm+jobName).hide();
+            $(gitRepositoryUrlInput+jobName).attr("value",scmSetting.RepositoryUrl);
+            $(gitNameInput+jobName).attr("value",scmSetting.Name);
+            $(gitBrancheInput+jobName).attr("value",scmSetting.BranchSpecifier);
+            break;
+        case svnScmType:
+            $(perforceScm+jobName).hide();
+            $(gitScm+jobName).hide();
+            $(svnScm+jobName).show();
+            $(svnRepositoryUrlInput+jobName).attr("value",scmSetting.RepositoryUrl);
+            $(svnLocalModuleDirInput+jobName).attr("value",scmSetting.LocalModulDir);
+            break;
+        case perforceScmType:
+            $(perforceScm+jobName).show();
+            $(gitScm+jobName).hide();
+            $(svnScm+jobName).hide();
+            $(p4UsernameInput+jobName).attr("value",scmSetting.UserName);
+            $(p4PasswordInput+jobName).attr("value",scmSetting.Password);
+            $(p4PortInput+jobName).attr("value",scmSetting.SCMPort);
+            $(p4WorkspaceNameInput+jobName).attr("value",scmSetting.Workspace);
+            $(p4ViewmapInput+jobName).text(scmSetting.ViewMap);
+            break;
+    }
+}
+function initConfigurationTabData(job){
+// init the configuration panel
+    var jobName = job.JobName;
+    $(projectConfigInput+jobName).text(job.Configuration.Configuration);
+}
+function initHistoryTabData(job){
+    var historyDto = job.Builds.JobHistories;
+    var jobName = job.JobName;
+    loadHistory(jobName,historyDto);
+}
+function initReportTabData(job){
+    var jobName = job.JobName;
+    $(projectReportInput+jobName).text(job.Report.Report);
+}
 
 
 function oTableFilter(){
@@ -1256,7 +1368,6 @@ $(document).ready(function() {
      * Load the jobs when page initiated
      * we need to load the all jobs with job name and job status
      * */
-     var firstJob;
      $.ajax({
         type : "get",
         cache: false,
@@ -1269,32 +1380,6 @@ $(document).ready(function() {
             $(window).resize(windowResize);
             var jobsData =data.Jobs;
             loadJobs(jobsData);
-            firstJob= jobsData[0];
-        }
-    });
-
-   // after the page intialized ,fetch all jobs data and update
-    $.ajax({
-        type : "get",
-        cache: false,
-        url:serviceUrl+"/api/tools/faketool",
-        data : "",
-        success : function(data) {
-            var jobs =data.Jobs;
-            $.each(jobs,function(i,job){
-                job.Result=buildStatusMap[job.Status.Status];
-                jobsMap[job.JobName]=job;
-                var settingJobName=job.Setting.JobName;
-                 var jobName=job.JobName;
-                 if(jobName!=settingJobName ){
-                 if(upstreamProjectMap[settingJobName]!=undefined){
-                 upstreamProjectMap[settingJobName].push(jobName);
-                 }else {
-                 upstreamProjectMap[settingJobName]=[];
-                 upstreamProjectMap[settingJobName].push(jobName);
-                 }
-                 }
-            });
         }
     });
 
@@ -1315,11 +1400,31 @@ $(document).ready(function() {
     $(document).delegate(topJobDelete,'click',batchJobDeleteClick);
 
     $(document).on( 'shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
-        if(e.target.name=="History"){
-            if(historyObjTable!=undefined){
-                historyObjTable.fnAdjustColumnSizing();
-            }
+        var jobName = e.target.href.split(seperator).slice(-1)[0];
+        var inited= e.target.attributes["data-init"].value;
+        if(e.target.name=="History"&&historyObjTable!=undefined){
+            historyObjTable.fnAdjustColumnSizing();
         }
+        if(inited=="true"){
+            return;
+        }
+        var job =jobsMap[jobName];
+        switch (e.target.name){
+            case "Setting":
+                detectJobSetting(job);
+                break;
+            case "Configure":
+                detectJobConfiguration(job);
+                break;
+            case "History":
+                detectJobHistory(job);
+                break;
+            case "Report":
+                detectJobReport(job);
+                break;
+        }
+        e.target.attributes["data-init"].value="true";
+
     });
 
     // clear the modal content and validation style after hiden
@@ -1369,7 +1474,6 @@ $(document).ready(function() {
                 success: function(result)
                 {
                     //If username exists, set response to true
-
                     uniqueJobMessage=result['Message'];
                     res = ( result['Type'] == 'ok' ) ? true : false;
                 },
@@ -1411,7 +1515,6 @@ $(document).ready(function() {
             return res;
         },
          "Please input valid project name and tool name"
-
     );
 
 
@@ -1433,7 +1536,6 @@ $(document).ready(function() {
                     checkTimingMessage= result['Message'];
                     //If username exists, set response to true
                     res = ( result['Type'] == 'ok' ) ? true : false;
-
                 },
                 error : function(XMLHttpRequest,
                                  textStatus, errorThrown) {
@@ -1488,6 +1590,7 @@ $(document).ready(function() {
     });
 
     $(".minifyme").click();
+    $(dtBasic+ ' tbody tr:first').click();
     $.connection.hub.url=serviceUrl+"/signalr";
     hub = $.connection.jobHub;
     hub.client.hello=function (message){

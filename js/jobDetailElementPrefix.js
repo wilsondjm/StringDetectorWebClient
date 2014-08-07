@@ -143,7 +143,6 @@ var viewPreBuild="#viewPreBuild";
 var viewNextBuild="#viewNextBuild";
 var returnBuildList ="#returnBuildList";
 
-
 /* Formating function for row details */
 function getJobDetails ( job )
 {
@@ -294,55 +293,8 @@ function getJobDetails ( job )
     var step4HeadObject = expandJobDetailObject.find(step4Head);
     step4HeadObject.attr("href",step4HeadObject.attr("href")+jobName);
 
-
-
-
     // history datatables
     var historyTableObject=expandJobDetailObject.find(historyTable);
     historyTableObject.attr("id",historyTableObject.attr("id")+jobName);
-    // initial the job setting fileds
-    //var jobSetting = jobSettingMap[jobName];
-    var jobSetting = job.Setting;
-     jobNameInputObject.attr("value",jobSetting.JobName);
-     timingInputObject.attr("value",jobSetting.BuildPeriody);
-    // detect scm type
-    var scmSetting = jobSetting.ScmSetting;
-    switch (scmSetting.$type){
-        case gitScmType:
-            $(perforceScmObject).hide();
-            $(gitScmObject).show();
-            $(svnScmObject).hide();
-            gitRepositoryUrlInputObject.attr("value",scmSetting.RepositoryUrl);
-            gitNameInputObject.attr("value",scmSetting.Name);
-            gitBranchInputObject.attr("value",scmSetting.BranchSpecifier);
-            break;
-        case svnScmType:
-            $(perforceScmObject).hide();
-            $(gitScmObject).hide();
-            $(svnScmObject).show();
-            svnRepositoryUrlInputObject.attr("value",scmSetting.RepositoryUrl);
-            svnLocalModuleDirInputObject.attr("value",scmSetting.LocalModulDir);
-            break;
-        case perforceScmType:
-            $(perforceScmObject).show();
-            $(gitScmObject).hide();
-            $(svnScmObject).hide();
-            p4UsernameInputObject.attr("value",scmSetting.UserName);
-            p4PasswordInputObject.attr("value",scmSetting.Password);
-            p4PortInputObject.attr("value",scmSetting.SCMPort);
-            p4WorkspaceNameInputObject.attr("value",scmSetting.Workspace);
-            p4ViewmapInputObject.text(scmSetting.ViewMap);
-            break;
-    }
-
-
-    // init the configuration panel
-    projectConfigInputObject.text(job.Configuration.Configuration);
-
-
-
-    //init the job report panel
-    // get no data in the report
-    projectReportInputObject.text(job.Report.Report);
     return expandJobDetailObject.html();
 }
