@@ -10,6 +10,7 @@ var  hub;
 var modeEnum={small:0,medium:1,large:2}
 var mode=modeEnum.large;
 var serviceUrl="http://vhwebdevserver.eng.citrite.net";
+
 /*var serviceUrl="http://localhost:61586";*/
 // signalR connection id
 var connectionId;
