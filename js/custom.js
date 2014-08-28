@@ -1478,7 +1478,7 @@ $(document).ready(function() {
                 success: function(result)
                 {
                     //If username exists, set response to true
-                    res =  true;
+                    res =  ( result['Type'] == 'ok' ) ? true : false;
                 },
                 error : function(XMLHttpRequest,
                                  textStatus, errorThrown) {
